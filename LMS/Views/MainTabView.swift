@@ -14,8 +14,7 @@ struct MainTabView: View {
             }
 
             NavigationStack {
-                Text("ProfileView Placeholder")
-                    .navigationTitle("Профиль")
+                ProfileView()
             }
             .tabItem {
                 Label("Профиль", systemImage: "person.circle")
