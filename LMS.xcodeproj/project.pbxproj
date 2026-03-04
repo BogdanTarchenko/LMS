@@ -13,6 +13,7 @@
 		10DA49655E93696141627497 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749498F0358CA210BD5EE427 /* Assignment.swift */; };
 		1526B6AD2B9A36980AB2A20D /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1FA7C177E3B0013EA66C8 /* Comment.swift */; };
 		176FCC7A84B4ECB09767AC5F /* LMSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D0FBA679AE4B1E4A5C948 /* LMSApp.swift */; };
+		1859DE3629D59C48BD53A422 /* ClassDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D1AD0570AC56CCCED1F0B1 /* ClassDetailViewModelTests.swift */; };
 		22155EB70191D1DE288F2961 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D37877E5BE77FA2A472A78C /* LoginViewModelTests.swift */; };
 		2556465E12AEDA627ADC87D3 /* GradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95BC75E1DFA6CC519FD7EB0 /* GradeView.swift */; };
 		3541DDF85C7A74D91471F304 /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFE6A93E90B00ABC7AD04E6 /* APIConfig.swift */; };
@@ -42,12 +43,15 @@
 		9CEF02FB805666A61BA74F41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E0B4D5685FBFD27D84FEB81 /* Assets.xcassets */; };
 		A06C85DB4D77ED215E76459D /* RoleBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEDBD049F68C912D43CE3D8 /* RoleBadge.swift */; };
 		A22B21AEF80C512D4AD9A3D1 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087A71AD3EDFEAF824176A4B /* LoadingButton.swift */; };
+		A5C4AC78B1164A0845C907A2 /* AssignmentCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF32CBB0F2375378326B3DCB /* AssignmentCardView.swift */; };
 		A699BA0923CE879FE27D822D /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F3AC2FBCA94359BA22B68 /* Role.swift */; };
 		B959A14F9D3500F11F2925B8 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF9578A267CE55BD9893FB /* KeychainHelper.swift */; };
 		BABD216732E9690219668F5D /* JoinClassSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597794DC803C2A7426C8B89C /* JoinClassSheet.swift */; };
 		C32AF9D215EA301162F78A21 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFA6996CB49DD2921D63DE6 /* MockData.swift */; };
 		C37DD33A81A0446966C69291 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B4018348DDFAD7AF35520 /* EmptyStateView.swift */; };
+		CFFBF8EEEF9BE82EFB1CF017 /* ClassSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1BE78F26FE1C119D82FC66 /* ClassSettingsView.swift */; };
 		DB7E8A08A907A312B75CA5EE /* ClassRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB61A511F14AD0F535E240C6 /* ClassRoom.swift */; };
+		DBCC63CD6F17624CF684BF60 /* ClassDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A85F43368BF4E69B57400C1 /* ClassDetailViewModel.swift */; };
 		DFC2AB92264289A22355168C /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C43F0994B9BDFB0FD5C501 /* LoginViewModel.swift */; };
 		E4DBFB1D50FA92F2107D4E8A /* RegisterViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8443E40DE6C2D6E17EDB2A54 /* RegisterViewModelTests.swift */; };
 		E5C50EC7289B4B2978AB5C74 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E4BBBDC85345005C55A7AB /* AuthResponse.swift */; };
@@ -94,7 +98,9 @@
 		48C11E09ED5E3B14E21D314C /* LMSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMSUITests.swift; sourceTree = "<group>"; };
 		4DEDBD049F68C912D43CE3D8 /* RoleBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleBadge.swift; sourceTree = "<group>"; };
 		573E8E20D51D8B3767362B6C /* LMSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMSTests.swift; sourceTree = "<group>"; };
+		58D1AD0570AC56CCCED1F0B1 /* ClassDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailViewModelTests.swift; sourceTree = "<group>"; };
 		597794DC803C2A7426C8B89C /* JoinClassSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinClassSheet.swift; sourceTree = "<group>"; };
+		5A85F43368BF4E69B57400C1 /* ClassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailViewModel.swift; sourceTree = "<group>"; };
 		73F1FA7C177E3B0013EA66C8 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		749498F0358CA210BD5EE427 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		75318DCCE7F4BD2530108748 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
@@ -117,10 +123,12 @@
 		C4B9394D111F73871D23AEEE /* RegisterRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterRequest.swift; sourceTree = "<group>"; };
 		C8F32F5550A0A0FFF1B8849C /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		CD617273E3892E794C081755 /* JSONCoder+LMS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONCoder+LMS.swift"; sourceTree = "<group>"; };
+		CF32CBB0F2375378326B3DCB /* AssignmentCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCardView.swift; sourceTree = "<group>"; };
 		D19B4018348DDFAD7AF35520 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		D3FAF60DCEB97BDAA5566B18 /* StatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBadge.swift; sourceTree = "<group>"; };
 		D7BF9578A267CE55BD9893FB /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		D95BC75E1DFA6CC519FD7EB0 /* GradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeView.swift; sourceTree = "<group>"; };
+		DA1BE78F26FE1C119D82FC66 /* ClassSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassSettingsView.swift; sourceTree = "<group>"; };
 		DA48B75B2DC4EB2861CA5891 /* ErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBanner.swift; sourceTree = "<group>"; };
 		DB61A511F14AD0F535E240C6 /* ClassRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassRoom.swift; sourceTree = "<group>"; };
 		EB382E358EC29BE36E9AD4F5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -132,9 +140,11 @@
 		07F586F0E6EC761A6229A14D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CF32CBB0F2375378326B3DCB /* AssignmentCardView.swift */,
 				B0D5944B7542BE7F80AB9B73 /* ClassCardView.swift */,
 				04B6E562D3E94E5B071DE437 /* ClassDetailView.swift */,
 				F46524CD34CD2C4D722DABA4 /* ClassListView.swift */,
+				DA1BE78F26FE1C119D82FC66 /* ClassSettingsView.swift */,
 				433CC0EC29492A36105825E1 /* CreateClassSheet.swift */,
 				597794DC803C2A7426C8B89C /* JoinClassSheet.swift */,
 			);
@@ -174,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				995ABD6411FBEC362B9B8A7E /* AuthManagerTests.swift */,
+				58D1AD0570AC56CCCED1F0B1 /* ClassDetailViewModelTests.swift */,
 				7EF1E340076E8D12118452CA /* ClassListViewModelTests.swift */,
 				573E8E20D51D8B3767362B6C /* LMSTests.swift */,
 				1D37877E5BE77FA2A472A78C /* LoginViewModelTests.swift */,
@@ -276,6 +287,7 @@
 		DD398D26E50FA93FBAF8AAAD /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				5A85F43368BF4E69B57400C1 /* ClassDetailViewModel.swift */,
 				B0D71CFCB022D22D40CAF3F0 /* ClassListViewModel.swift */,
 				75C43F0994B9BDFB0FD5C501 /* LoginViewModel.swift */,
 				240F3E33B14ECEF53B2F97C1 /* RegisterViewModel.swift */,
@@ -450,14 +462,17 @@
 				99C032E1AA11E01CC32FF8B1 /* APIService.swift in Sources */,
 				58E911F22A7394594CE60F36 /* APIServiceProtocol.swift in Sources */,
 				10DA49655E93696141627497 /* Assignment.swift in Sources */,
+				A5C4AC78B1164A0845C907A2 /* AssignmentCardView.swift in Sources */,
 				4203DA0AC2734437AB0EA611 /* AuthManager.swift in Sources */,
 				E5C50EC7289B4B2978AB5C74 /* AuthResponse.swift in Sources */,
 				47B2AF39F75D9CAE16189B51 /* AvatarView.swift in Sources */,
 				5B30B2D138F7EFB9AABC96C0 /* ClassCardView.swift in Sources */,
 				F8929E59703720D7782F4E21 /* ClassDetailView.swift in Sources */,
+				DBCC63CD6F17624CF684BF60 /* ClassDetailViewModel.swift in Sources */,
 				418BCAC0F3C4958C011F9E5A /* ClassListView.swift in Sources */,
 				8E9F09F3CBBFF2B88A31C8C6 /* ClassListViewModel.swift in Sources */,
 				DB7E8A08A907A312B75CA5EE /* ClassRoom.swift in Sources */,
+				CFFBF8EEEF9BE82EFB1CF017 /* ClassSettingsView.swift in Sources */,
 				1526B6AD2B9A36980AB2A20D /* Comment.swift in Sources */,
 				6E4EDCAF04D0259884EF6C94 /* CreateClassSheet.swift in Sources */,
 				C37DD33A81A0446966C69291 /* EmptyStateView.swift in Sources */,
@@ -493,6 +508,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				649B705DDE54A7D921AE51F9 /* AuthManagerTests.swift in Sources */,
+				1859DE3629D59C48BD53A422 /* ClassDetailViewModelTests.swift in Sources */,
 				6D97DF4DF232C2DD882B1C9D /* ClassListViewModelTests.swift in Sources */,
 				F2FFFC1B4A6BBE02F1B3AE62 /* LMSTests.swift in Sources */,
 				22155EB70191D1DE288F2961 /* LoginViewModelTests.swift in Sources */,
