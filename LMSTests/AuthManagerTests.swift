@@ -164,20 +164,4 @@ final class AuthManagerTests: XCTestCase {
     }
 }
 
-// MARK: - MockKeychainHelper
-
-final class MockKeychainHelper: KeychainHelperProtocol {
-    var savedToken: String?
-
-    func save(_ value: String, forKey key: String) {
-        savedToken = value
-    }
-
-    func get(forKey key: String) -> String? {
-        return savedToken
-    }
-
-    func delete(forKey key: String) {
-        savedToken = nil
-    }
-}
+// MockKeychainHelper is in LMS/Services/KeychainHelper.swift

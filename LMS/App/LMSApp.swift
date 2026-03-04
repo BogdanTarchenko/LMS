@@ -10,7 +10,7 @@ struct LMSApp: App {
                 if authManager.isAuthenticated {
                     MainTabView()
                 } else {
-                    Text("LoginView Placeholder")
+                    LoginView()
                 }
             }
             .environment(authManager)
