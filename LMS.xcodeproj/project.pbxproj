@@ -9,15 +9,21 @@
 /* Begin PBXBuildFile section */
 		001CBC15BF77503AC22192E3 /* LMSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C11E09ED5E3B14E21D314C /* LMSUITests.swift */; };
 		00487D3F440069A25AEF0432 /* ErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48B75B2DC4EB2861CA5891 /* ErrorBanner.swift */; };
+		0569D474ECA24702EC7473DD /* AssignmentTeacherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93E575C77FB7F50106E908D /* AssignmentTeacherView.swift */; };
 		06FA0B757A5B4A9957B3C07D /* UpdateProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0FCEED104A26B069E8EAF /* UpdateProfileRequest.swift */; };
 		10DA49655E93696141627497 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749498F0358CA210BD5EE427 /* Assignment.swift */; };
 		1526B6AD2B9A36980AB2A20D /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1FA7C177E3B0013EA66C8 /* Comment.swift */; };
+		15F0B77425D460B9480D8991 /* SubmissionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD1D45D06B894F0A19F43D /* SubmissionRowView.swift */; };
 		176FCC7A84B4ECB09767AC5F /* LMSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D0FBA679AE4B1E4A5C948 /* LMSApp.swift */; };
 		1859DE3629D59C48BD53A422 /* ClassDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D1AD0570AC56CCCED1F0B1 /* ClassDetailViewModelTests.swift */; };
 		22155EB70191D1DE288F2961 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D37877E5BE77FA2A472A78C /* LoginViewModelTests.swift */; };
 		2556465E12AEDA627ADC87D3 /* GradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95BC75E1DFA6CC519FD7EB0 /* GradeView.swift */; };
+		258FA6E28679BE0FEFFE8EDD /* CreateAssignmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB75104D79F6C1FEEDE8BEC /* CreateAssignmentViewModel.swift */; };
+		29DF839DB91F0C291E94CE73 /* AssignmentTeacherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62825A9FEDC18CFB7F21B6AB /* AssignmentTeacherViewModel.swift */; };
 		3541DDF85C7A74D91471F304 /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFE6A93E90B00ABC7AD04E6 /* APIConfig.swift */; };
 		377DA7F0CAD1AF6F4E8C90C9 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FAF60DCEB97BDAA5566B18 /* StatusBadge.swift */; };
+		3863896A118603C282F50B06 /* SubmissionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1269D4579A9A367533C7E4A7 /* SubmissionDetailView.swift */; };
+		3F698C641087F2637A63444C /* AssignmentStudentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD24EB53B8C8A1141CCC16A /* AssignmentStudentView.swift */; };
 		418BCAC0F3C4958C011F9E5A /* ClassListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46524CD34CD2C4D722DABA4 /* ClassListView.swift */; };
 		4203DA0AC2734437AB0EA611 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18307B108761FB2302C79B27 /* AuthManager.swift */; };
 		42E97502F6194BF0C4EBD5BA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB382E358EC29BE36E9AD4F5 /* User.swift */; };
@@ -36,6 +42,7 @@
 		6E4EDCAF04D0259884EF6C94 /* CreateClassSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433CC0EC29492A36105825E1 /* CreateClassSheet.swift */; };
 		7D1E55E2FFA44BD0538495B4 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3ED9DCD58C1C9C28BAAD8F /* MainTabView.swift */; };
 		7E97E5F32B93FDBB07C6F05D /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFB8120E1FBB8994C96814D /* MockAPIService.swift */; };
+		807D22776002CF6DCF26454C /* SubmissionDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2D1091DCC62CC35B5ED62D /* SubmissionDetailViewModel.swift */; };
 		8A0E5313FF193C19E6686E12 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467075BAA6F4ECC6096009DA /* RegisterView.swift */; };
 		8E9F09F3CBBFF2B88A31C8C6 /* ClassListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D71CFCB022D22D40CAF3F0 /* ClassListViewModel.swift */; };
 		9179B04081AA866E14E767FB /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F32F5550A0A0FFF1B8849C /* Member.swift */; };
@@ -49,6 +56,8 @@
 		A699BA0923CE879FE27D822D /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F3AC2FBCA94359BA22B68 /* Role.swift */; };
 		B959A14F9D3500F11F2925B8 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF9578A267CE55BD9893FB /* KeychainHelper.swift */; };
 		BABD216732E9690219668F5D /* JoinClassSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597794DC803C2A7426C8B89C /* JoinClassSheet.swift */; };
+		BBE9DDBCB9146BC768306AF1 /* CreateAssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A989696A2EB698F76DBAE52E /* CreateAssignmentView.swift */; };
+		BFBEEBCCD4C22F6970996BEF /* AssignmentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371F3971D1E20D8342C3609 /* AssignmentViewModelTests.swift */; };
 		C32AF9D215EA301162F78A21 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFA6996CB49DD2921D63DE6 /* MockData.swift */; };
 		C37DD33A81A0446966C69291 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B4018348DDFAD7AF35520 /* EmptyStateView.swift */; };
 		CFFBF8EEEF9BE82EFB1CF017 /* ClassSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1BE78F26FE1C119D82FC66 /* ClassSettingsView.swift */; };
@@ -57,8 +66,10 @@
 		DFC2AB92264289A22355168C /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C43F0994B9BDFB0FD5C501 /* LoginViewModel.swift */; };
 		E4DBFB1D50FA92F2107D4E8A /* RegisterViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8443E40DE6C2D6E17EDB2A54 /* RegisterViewModelTests.swift */; };
 		E5C50EC7289B4B2978AB5C74 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E4BBBDC85345005C55A7AB /* AuthResponse.swift */; };
+		EB845E24E65541C16DB3032C /* AssignmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810D58A1C5144AB6DBA2B9EA /* AssignmentDetailView.swift */; };
 		F1B31D1C7B4BAC26EAAE94E0 /* MemberRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A1FD86D331235E08E6DDA6 /* MemberRowView.swift */; };
 		F2FFFC1B4A6BBE02F1B3AE62 /* LMSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573E8E20D51D8B3767362B6C /* LMSTests.swift */; };
+		F5608C5C9675D3FDEB9AD3A0 /* AssignmentStudentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFDE99CEFAB4A06AFA2E570 /* AssignmentStudentViewModel.swift */; };
 		F5902983E45FCF3169D46A62 /* JSONCoder+LMS.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD617273E3892E794C081755 /* JSONCoder+LMS.swift */; };
 		F8929E59703720D7782F4E21 /* ClassDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B6E562D3E94E5B071DE437 /* ClassDetailView.swift */; };
 		F9F0A021A66D23E6B5D0DFA7 /* MembersListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5B62D2BE31406DB236A8A8 /* MembersListViewModelTests.swift */; };
@@ -84,18 +95,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0371F3971D1E20D8342C3609 /* AssignmentViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewModelTests.swift; sourceTree = "<group>"; };
 		04B6E562D3E94E5B071DE437 /* ClassDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailView.swift; sourceTree = "<group>"; };
 		05C0FCEED104A26B069E8EAF /* UpdateProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileRequest.swift; sourceTree = "<group>"; };
 		087A71AD3EDFEAF824176A4B /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
 		0C123451B40E8B7B7A0FF513 /* ModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsTests.swift; sourceTree = "<group>"; };
+		0CD24EB53B8C8A1141CCC16A /* AssignmentStudentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentStudentView.swift; sourceTree = "<group>"; };
 		0CDC6B511AF3C2E9E524D50E /* SubmissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionStatus.swift; sourceTree = "<group>"; };
 		0E208574B12C55048815F50B /* NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
 		101A765C235970281E8BF275 /* MembersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersListView.swift; sourceTree = "<group>"; };
+		1269D4579A9A367533C7E4A7 /* SubmissionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionDetailView.swift; sourceTree = "<group>"; };
 		18307B108761FB2302C79B27 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19E7413006C830E7909E2ED0 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		1D37877E5BE77FA2A472A78C /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		1D3ED9DCD58C1C9C28BAAD8F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		1EB75104D79F6C1FEEDE8BEC /* CreateAssignmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAssignmentViewModel.swift; sourceTree = "<group>"; };
 		240F3E33B14ECEF53B2F97C1 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		2AFDE99CEFAB4A06AFA2E570 /* AssignmentStudentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentStudentViewModel.swift; sourceTree = "<group>"; };
 		2EFB8120E1FBB8994C96814D /* MockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
 		374BE9173FFAADD2EE68DBDC /* LMSUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LMSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		433CC0EC29492A36105825E1 /* CreateClassSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassSheet.swift; sourceTree = "<group>"; };
@@ -109,6 +125,9 @@
 		597794DC803C2A7426C8B89C /* JoinClassSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinClassSheet.swift; sourceTree = "<group>"; };
 		5A85F43368BF4E69B57400C1 /* ClassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailViewModel.swift; sourceTree = "<group>"; };
 		60C3F81941E42D53776923BB /* MembersListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersListViewModel.swift; sourceTree = "<group>"; };
+		62825A9FEDC18CFB7F21B6AB /* AssignmentTeacherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTeacherViewModel.swift; sourceTree = "<group>"; };
+		65DD1D45D06B894F0A19F43D /* SubmissionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionRowView.swift; sourceTree = "<group>"; };
+		6E2D1091DCC62CC35B5ED62D /* SubmissionDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionDetailViewModel.swift; sourceTree = "<group>"; };
 		73F1FA7C177E3B0013EA66C8 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		749498F0358CA210BD5EE427 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		75318DCCE7F4BD2530108748 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
@@ -116,6 +135,7 @@
 		7E9D8BC2ECCB018555CB7595 /* APIServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceProtocol.swift; sourceTree = "<group>"; };
 		7EF1E340076E8D12118452CA /* ClassListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassListViewModelTests.swift; sourceTree = "<group>"; };
 		806D0FBA679AE4B1E4A5C948 /* LMSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMSApp.swift; sourceTree = "<group>"; };
+		810D58A1C5144AB6DBA2B9EA /* AssignmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentDetailView.swift; sourceTree = "<group>"; };
 		83981A08A310D807C33D60B3 /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Submission.swift; sourceTree = "<group>"; };
 		8443E40DE6C2D6E17EDB2A54 /* RegisterViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModelTests.swift; sourceTree = "<group>"; };
 		8E0B4D5685FBFD27D84FEB81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -123,6 +143,7 @@
 		999A52EF41AC9906B503BDC3 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		99A74AD1A245310BAE017775 /* LMS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LMS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CFE6A93E90B00ABC7AD04E6 /* APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
+		A989696A2EB698F76DBAE52E /* CreateAssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAssignmentView.swift; sourceTree = "<group>"; };
 		B0D5944B7542BE7F80AB9B73 /* ClassCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassCardView.swift; sourceTree = "<group>"; };
 		B0D71CFCB022D22D40CAF3F0 /* ClassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassListViewModel.swift; sourceTree = "<group>"; };
 		B0E4BBBDC85345005C55A7AB /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
@@ -144,6 +165,7 @@
 		EB382E358EC29BE36E9AD4F5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F13E7EF54B505858D568ADDC /* LMSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LMSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46524CD34CD2C4D722DABA4 /* ClassListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassListView.swift; sourceTree = "<group>"; };
+		F93E575C77FB7F50106E908D /* AssignmentTeacherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTeacherView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -193,6 +215,7 @@
 		3698B46287C0F3B82B739F42 /* LMSTests */ = {
 			isa = PBXGroup;
 			children = (
+				0371F3971D1E20D8342C3609 /* AssignmentViewModelTests.swift */,
 				995ABD6411FBEC362B9B8A7E /* AuthManagerTests.swift */,
 				58D1AD0570AC56CCCED1F0B1 /* ClassDetailViewModelTests.swift */,
 				7EF1E340076E8D12118452CA /* ClassListViewModelTests.swift */,
@@ -246,6 +269,12 @@
 		85DED15B342D55751A917E29 /* Assignments */ = {
 			isa = PBXGroup;
 			children = (
+				810D58A1C5144AB6DBA2B9EA /* AssignmentDetailView.swift */,
+				0CD24EB53B8C8A1141CCC16A /* AssignmentStudentView.swift */,
+				F93E575C77FB7F50106E908D /* AssignmentTeacherView.swift */,
+				A989696A2EB698F76DBAE52E /* CreateAssignmentView.swift */,
+				1269D4579A9A367533C7E4A7 /* SubmissionDetailView.swift */,
+				65DD1D45D06B894F0A19F43D /* SubmissionRowView.swift */,
 			);
 			path = Assignments;
 			sourceTree = "<group>";
@@ -301,11 +330,15 @@
 		DD398D26E50FA93FBAF8AAAD /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				2AFDE99CEFAB4A06AFA2E570 /* AssignmentStudentViewModel.swift */,
+				62825A9FEDC18CFB7F21B6AB /* AssignmentTeacherViewModel.swift */,
 				5A85F43368BF4E69B57400C1 /* ClassDetailViewModel.swift */,
 				B0D71CFCB022D22D40CAF3F0 /* ClassListViewModel.swift */,
+				1EB75104D79F6C1FEEDE8BEC /* CreateAssignmentViewModel.swift */,
 				75C43F0994B9BDFB0FD5C501 /* LoginViewModel.swift */,
 				60C3F81941E42D53776923BB /* MembersListViewModel.swift */,
 				240F3E33B14ECEF53B2F97C1 /* RegisterViewModel.swift */,
+				6E2D1091DCC62CC35B5ED62D /* SubmissionDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -478,6 +511,11 @@
 				58E911F22A7394594CE60F36 /* APIServiceProtocol.swift in Sources */,
 				10DA49655E93696141627497 /* Assignment.swift in Sources */,
 				A5C4AC78B1164A0845C907A2 /* AssignmentCardView.swift in Sources */,
+				EB845E24E65541C16DB3032C /* AssignmentDetailView.swift in Sources */,
+				3F698C641087F2637A63444C /* AssignmentStudentView.swift in Sources */,
+				F5608C5C9675D3FDEB9AD3A0 /* AssignmentStudentViewModel.swift in Sources */,
+				0569D474ECA24702EC7473DD /* AssignmentTeacherView.swift in Sources */,
+				29DF839DB91F0C291E94CE73 /* AssignmentTeacherViewModel.swift in Sources */,
 				4203DA0AC2734437AB0EA611 /* AuthManager.swift in Sources */,
 				E5C50EC7289B4B2978AB5C74 /* AuthResponse.swift in Sources */,
 				47B2AF39F75D9CAE16189B51 /* AvatarView.swift in Sources */,
@@ -489,6 +527,8 @@
 				DB7E8A08A907A312B75CA5EE /* ClassRoom.swift in Sources */,
 				CFFBF8EEEF9BE82EFB1CF017 /* ClassSettingsView.swift in Sources */,
 				1526B6AD2B9A36980AB2A20D /* Comment.swift in Sources */,
+				BBE9DDBCB9146BC768306AF1 /* CreateAssignmentView.swift in Sources */,
+				258FA6E28679BE0FEFFE8EDD /* CreateAssignmentViewModel.swift in Sources */,
 				6E4EDCAF04D0259884EF6C94 /* CreateClassSheet.swift in Sources */,
 				C37DD33A81A0446966C69291 /* EmptyStateView.swift in Sources */,
 				00487D3F440069A25AEF0432 /* ErrorBanner.swift in Sources */,
@@ -516,6 +556,9 @@
 				A06C85DB4D77ED215E76459D /* RoleBadge.swift in Sources */,
 				377DA7F0CAD1AF6F4E8C90C9 /* StatusBadge.swift in Sources */,
 				45F6F00D7552C52D25AA7BCC /* Submission.swift in Sources */,
+				3863896A118603C282F50B06 /* SubmissionDetailView.swift in Sources */,
+				807D22776002CF6DCF26454C /* SubmissionDetailViewModel.swift in Sources */,
+				15F0B77425D460B9480D8991 /* SubmissionRowView.swift in Sources */,
 				599C278EADB32B4BA3EBEC53 /* SubmissionStatus.swift in Sources */,
 				06FA0B757A5B4A9957B3C07D /* UpdateProfileRequest.swift in Sources */,
 				42E97502F6194BF0C4EBD5BA /* User.swift in Sources */,
@@ -526,6 +569,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFBEEBCCD4C22F6970996BEF /* AssignmentViewModelTests.swift in Sources */,
 				649B705DDE54A7D921AE51F9 /* AuthManagerTests.swift in Sources */,
 				1859DE3629D59C48BD53A422 /* ClassDetailViewModelTests.swift in Sources */,
 				6D97DF4DF232C2DD882B1C9D /* ClassListViewModelTests.swift in Sources */,

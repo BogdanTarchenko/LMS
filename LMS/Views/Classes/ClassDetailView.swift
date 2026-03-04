@@ -63,7 +63,9 @@ struct ClassDetailView: View {
             }
         }
         .sheet(isPresented: $showCreateAssignment) {
-            Text("CreateAssignmentView Placeholder")
+            CreateAssignmentView(classId: viewModel.classroom.id) {
+                Task { await viewModel.loadAssignments() }
+            }
         }
         .sheet(isPresented: $showSettings) {
             ClassSettingsView(viewModel: viewModel)
