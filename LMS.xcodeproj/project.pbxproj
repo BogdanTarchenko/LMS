@@ -43,9 +43,11 @@
 		C37DD33A81A0446966C69291 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B4018348DDFAD7AF35520 /* EmptyStateView.swift */; };
 		DB7E8A08A907A312B75CA5EE /* ClassRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB61A511F14AD0F535E240C6 /* ClassRoom.swift */; };
 		DFC2AB92264289A22355168C /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C43F0994B9BDFB0FD5C501 /* LoginViewModel.swift */; };
+		E4DBFB1D50FA92F2107D4E8A /* RegisterViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8443E40DE6C2D6E17EDB2A54 /* RegisterViewModelTests.swift */; };
 		E5C50EC7289B4B2978AB5C74 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E4BBBDC85345005C55A7AB /* AuthResponse.swift */; };
 		F2FFFC1B4A6BBE02F1B3AE62 /* LMSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573E8E20D51D8B3767362B6C /* LMSTests.swift */; };
 		F5902983E45FCF3169D46A62 /* JSONCoder+LMS.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD617273E3892E794C081755 /* JSONCoder+LMS.swift */; };
+		FC0DDB990E1C2DD3F4F14EB5 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F3E33B14ECEF53B2F97C1 /* RegisterViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,7 @@
 		19E7413006C830E7909E2ED0 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		1D37877E5BE77FA2A472A78C /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		1D3ED9DCD58C1C9C28BAAD8F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		240F3E33B14ECEF53B2F97C1 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		2EFB8120E1FBB8994C96814D /* MockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
 		374BE9173FFAADD2EE68DBDC /* LMSUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LMSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		437F3AC2FBCA94359BA22B68 /* Role.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
@@ -89,6 +92,7 @@
 		7E9D8BC2ECCB018555CB7595 /* APIServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceProtocol.swift; sourceTree = "<group>"; };
 		806D0FBA679AE4B1E4A5C948 /* LMSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMSApp.swift; sourceTree = "<group>"; };
 		83981A08A310D807C33D60B3 /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Submission.swift; sourceTree = "<group>"; };
+		8443E40DE6C2D6E17EDB2A54 /* RegisterViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModelTests.swift; sourceTree = "<group>"; };
 		8E0B4D5685FBFD27D84FEB81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		995ABD6411FBEC362B9B8A7E /* AuthManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerTests.swift; sourceTree = "<group>"; };
 		999A52EF41AC9906B503BDC3 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				1D37877E5BE77FA2A472A78C /* LoginViewModelTests.swift */,
 				0C123451B40E8B7B7A0FF513 /* ModelsTests.swift */,
 				0E208574B12C55048815F50B /* NetworkTests.swift */,
+				8443E40DE6C2D6E17EDB2A54 /* RegisterViewModelTests.swift */,
 				163FCDAC90831492FA96CE73 /* Helpers */,
 			);
 			path = LMSTests;
@@ -252,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				75C43F0994B9BDFB0FD5C501 /* LoginViewModel.swift */,
+				240F3E33B14ECEF53B2F97C1 /* RegisterViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -444,6 +450,7 @@
 				917F5DB397E652B1E18E525F /* NetworkError.swift in Sources */,
 				61CF04DF884FE81558379F40 /* RegisterRequest.swift in Sources */,
 				8A0E5313FF193C19E6686E12 /* RegisterView.swift in Sources */,
+				FC0DDB990E1C2DD3F4F14EB5 /* RegisterViewModel.swift in Sources */,
 				A699BA0923CE879FE27D822D /* Role.swift in Sources */,
 				A06C85DB4D77ED215E76459D /* RoleBadge.swift in Sources */,
 				377DA7F0CAD1AF6F4E8C90C9 /* StatusBadge.swift in Sources */,
@@ -463,6 +470,7 @@
 				22155EB70191D1DE288F2961 /* LoginViewModelTests.swift in Sources */,
 				4C3404BFD8E99267A0990F61 /* ModelsTests.swift in Sources */,
 				5CB13C7BB585D735C58E01C5 /* NetworkTests.swift in Sources */,
+				E4DBFB1D50FA92F2107D4E8A /* RegisterViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
