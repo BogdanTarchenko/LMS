@@ -44,6 +44,7 @@
 		6C364828E40E862EEAB696E0 /* MembersListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C3F81941E42D53776923BB /* MembersListViewModel.swift */; };
 		6D97DF4DF232C2DD882B1C9D /* ClassListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF1E340076E8D12118452CA /* ClassListViewModelTests.swift */; };
 		6E4EDCAF04D0259884EF6C94 /* CreateClassSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433CC0EC29492A36105825E1 /* CreateClassSheet.swift */; };
+		7B86D286FCE24C59248279E1 /* PageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E83125AE0448DF0982311C8 /* PageResponse.swift */; };
 		7D1E55E2FFA44BD0538495B4 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3ED9DCD58C1C9C28BAAD8F /* MainTabView.swift */; };
 		7E97E5F32B93FDBB07C6F05D /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFB8120E1FBB8994C96814D /* MockAPIService.swift */; };
 		807D22776002CF6DCF26454C /* SubmissionDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2D1091DCC62CC35B5ED62D /* SubmissionDetailViewModel.swift */; };
@@ -133,6 +134,7 @@
 		58D1AD0570AC56CCCED1F0B1 /* ClassDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailViewModelTests.swift; sourceTree = "<group>"; };
 		597794DC803C2A7426C8B89C /* JoinClassSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinClassSheet.swift; sourceTree = "<group>"; };
 		5A85F43368BF4E69B57400C1 /* ClassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailViewModel.swift; sourceTree = "<group>"; };
+		5E83125AE0448DF0982311C8 /* PageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageResponse.swift; sourceTree = "<group>"; };
 		60C3F81941E42D53776923BB /* MembersListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersListViewModel.swift; sourceTree = "<group>"; };
 		62825A9FEDC18CFB7F21B6AB /* AssignmentTeacherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTeacherViewModel.swift; sourceTree = "<group>"; };
 		65DD1D45D06B894F0A19F43D /* SubmissionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionRowView.swift; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 				73F1FA7C177E3B0013EA66C8 /* Comment.swift */,
 				C8F32F5550A0A0FFF1B8849C /* Member.swift */,
 				BDFA6996CB49DD2921D63DE6 /* MockData.swift */,
+				5E83125AE0448DF0982311C8 /* PageResponse.swift */,
 				C4B9394D111F73871D23AEEE /* RegisterRequest.swift */,
 				437F3AC2FBCA94359BA22B68 /* Role.swift */,
 				83981A08A310D807C33D60B3 /* Submission.swift */,
@@ -577,6 +580,7 @@
 				7E97E5F32B93FDBB07C6F05D /* MockAPIService.swift in Sources */,
 				C32AF9D215EA301162F78A21 /* MockData.swift in Sources */,
 				917F5DB397E652B1E18E525F /* NetworkError.swift in Sources */,
+				7B86D286FCE24C59248279E1 /* PageResponse.swift in Sources */,
 				F0BEFB57771134CC1D3B4C1A /* ProfileView.swift in Sources */,
 				B912CDB762BA1FA4F8919CA1 /* ProfileViewModel.swift in Sources */,
 				61CF04DF884FE81558379F40 /* RegisterRequest.swift in Sources */,

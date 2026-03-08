@@ -142,9 +142,9 @@ final class MockAPIService: APIServiceProtocol {
         if let error = shouldThrowError { throw error }
         return Comment(
             id: UUID().uuidString,
+            assignmentId: assignmentId,
             authorId: MockData.sampleUser.id,
             authorName: "\(MockData.sampleUser.firstName) \(MockData.sampleUser.lastName)",
-            authorAvatarURL: MockData.sampleUser.avatarURL,
             text: text,
             createdAt: Date()
         )

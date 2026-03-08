@@ -6,7 +6,7 @@ struct MemberRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             AvatarView(
-                url: member.avatarURL,
+                url: nil,
                 firstName: member.firstName,
                 lastName: member.lastName,
                 size: 36

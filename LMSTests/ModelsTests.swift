@@ -247,9 +247,9 @@ final class CommentModelTests: XCTestCase {
         let json = """
         {
             "id": "com-1",
+            "assignmentId": "assign-1",
             "authorId": "user-1",
             "authorName": "Иван Петров",
-            "authorAvatarUrl": "https://example.com/avatar.jpg",
             "text": "Отличная работа!",
             "createdAt": "2026-03-01T15:00:00Z"
         }
@@ -258,14 +258,14 @@ final class CommentModelTests: XCTestCase {
         let comment = try JSONDecoder.lms.decode(Comment.self, from: json)
 
         XCTAssertEqual(comment.id, "com-1")
+        XCTAssertEqual(comment.assignmentId, "assign-1")
         XCTAssertEqual(comment.authorId, "user-1")
         XCTAssertEqual(comment.authorName, "Иван Петров")
-        XCTAssertEqual(comment.authorAvatarURL, "https://example.com/avatar.jpg")
         XCTAssertEqual(comment.text, "Отличная работа!")
         XCTAssertNotNil(comment.createdAt)
     }
 
-    func test_comment_decodesFromJSON_noAvatar() throws {
+    func test_comment_decodesFromJSON_noAssignmentId() throws {
         let json = """
         {
             "id": "com-2",
@@ -278,7 +278,7 @@ final class CommentModelTests: XCTestCase {
 
         let comment = try JSONDecoder.lms.decode(Comment.self, from: json)
 
-        XCTAssertNil(comment.authorAvatarURL)
+        XCTAssertNil(comment.assignmentId)
     }
 }
 
@@ -287,11 +287,10 @@ final class MemberModelTests: XCTestCase {
     func test_member_decodesFromJSON() throws {
         let json = """
         {
-            "id": "user-1",
+            "userId": "user-1",
             "firstName": "Иван",
             "lastName": "Петров",
             "email": "ivan@test.com",
-            "avatarUrl": "https://example.com/avatar.jpg",
             "role": "TEACHER"
         }
         """.data(using: .utf8)!
@@ -299,10 +298,10 @@ final class MemberModelTests: XCTestCase {
         let member = try JSONDecoder.lms.decode(Member.self, from: json)
 
         XCTAssertEqual(member.id, "user-1")
+        XCTAssertEqual(member.userId, "user-1")
         XCTAssertEqual(member.firstName, "Иван")
         XCTAssertEqual(member.lastName, "Петров")
         XCTAssertEqual(member.email, "ivan@test.com")
-        XCTAssertEqual(member.avatarURL, "https://example.com/avatar.jpg")
         XCTAssertEqual(member.role, .teacher)
     }
 }
@@ -376,7 +375,7 @@ final class UpdateProfileRequestModelTests: XCTestCase {
             firstName: "Новое",
             lastName: "Имя",
             dateOfBirth: "1999-05-20",
-            avatarBase64: nil
+            avatarUrl: nil
         )
 
         let data = try JSONEncoder.lms.encode(request)

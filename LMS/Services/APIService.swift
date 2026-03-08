@@ -30,7 +30,7 @@ final class APIService: APIServiceProtocol {
     // MARK: - Classes
 
     func getMyClasses() async throws -> [ClassRoom] {
-        return try await get("/classes")
+        return try await getPage("/classes")
     }
 
     func createClass(name: String) async throws -> ClassRoom {
@@ -55,7 +55,7 @@ final class APIService: APIServiceProtocol {
     // MARK: - Members
 
     func getMembers(classId: String) async throws -> [Member] {
-        return try await get("/classes/\(classId)/members")
+        return try await getPage("/classes/\(classId)/members")
     }
 
     func assignRole(classId: String, userId: String, role: Role) async throws {
@@ -66,7 +66,7 @@ final class APIService: APIServiceProtocol {
     // MARK: - Assignments
 
     func getAssignments(classId: String) async throws -> [Assignment] {
-        return try await get("/classes/\(classId)/assignments")
+        return try await getPage("/classes/\(classId)/assignments")
     }
 
     func createAssignment(classId: String, title: String, description: String) async throws -> Assignment {
@@ -106,7 +106,7 @@ final class APIService: APIServiceProtocol {
     // MARK: - Comments
 
     func getComments(assignmentId: String) async throws -> [Comment] {
-        return try await get("/assignments/\(assignmentId)/comments")
+        return try await getPage("/assignments/\(assignmentId)/comments")
     }
 
     func addComment(assignmentId: String, text: String) async throws -> Comment {
@@ -130,6 +130,11 @@ final class APIService: APIServiceProtocol {
     private func get<T: Decodable>(_ path: String) async throws -> T {
         let request = try makeRequest(path, method: "GET")
         return try await perform(request)
+    }
+
+    private func getPage<T: Decodable>(_ path: String) async throws -> [T] {
+        let page: PageResponse<T> = try await get(path)
+        return page.content
     }
 
     private func post<T: Decodable>(_ path: String, body: [String: Any]) async throws -> T {

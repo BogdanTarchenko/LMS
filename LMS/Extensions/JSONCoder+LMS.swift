@@ -3,9 +3,12 @@ import Foundation
 extension JSONDecoder {
     static let lms: JSONDecoder = {
         let decoder = JSONDecoder()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+
+        let iso8601WithFractional = ISO8601DateFormatter()
+        iso8601WithFractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let iso8601 = ISO8601DateFormatter()
+        iso8601.formatOptions = [.withInternetDateTime]
 
         let dateOnlyFormatter = DateFormatter()
         dateOnlyFormatter.dateFormat = "yyyy-MM-dd"
@@ -15,7 +18,10 @@ extension JSONDecoder {
             let container = try decoder.singleValueContainer()
             let dateString = try container.decode(String.self)
 
-            if let date = dateFormatter.date(from: dateString) {
+            if let date = iso8601WithFractional.date(from: dateString) {
+                return date
+            }
+            if let date = iso8601.date(from: dateString) {
                 return date
             }
             if let date = dateOnlyFormatter.date(from: dateString) {
@@ -33,10 +39,12 @@ extension JSONDecoder {
 extension JSONEncoder {
     static let lms: JSONEncoder = {
         let encoder = JSONEncoder()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        let iso8601 = ISO8601DateFormatter()
+        iso8601.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        encoder.dateEncodingStrategy = .custom { date, encoder in
+            var container = encoder.singleValueContainer()
+            try container.encode(iso8601.string(from: date))
+        }
         return encoder
     }()
 }

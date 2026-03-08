@@ -50,9 +50,9 @@ enum MockData {
     ]
 
     static let sampleMembers: [Member] = [
-        Member(id: "user-1", firstName: "Иван", lastName: "Петров", email: "ivan@test.com", avatarURL: "https://example.com/avatar.jpg", role: .owner),
-        Member(id: "user-2", firstName: "Анна", lastName: "Сидорова", email: "anna@test.com", avatarURL: nil, role: .teacher),
-        Member(id: "user-3", firstName: "Пётр", lastName: "Иванов", email: "petr@test.com", avatarURL: nil, role: .student),
+        Member(userId: "user-1", firstName: "Иван", lastName: "Петров", email: "ivan@test.com", role: .owner),
+        Member(userId: "user-2", firstName: "Анна", lastName: "Сидорова", email: "anna@test.com", role: .teacher),
+        Member(userId: "user-3", firstName: "Пётр", lastName: "Иванов", email: "petr@test.com", role: .student),
     ]
 
     static let sampleSubmissions: [Submission] = [
@@ -61,8 +61,8 @@ enum MockData {
     ]
 
     static let sampleComments: [Comment] = [
-        Comment(id: "com-1", authorId: "user-1", authorName: "Иван Петров", authorAvatarURL: "https://example.com/avatar.jpg", text: "Отличная работа!", createdAt: Date(timeIntervalSince1970: 1709366400)),
-        Comment(id: "com-2", authorId: "user-3", authorName: "Пётр Иванов", authorAvatarURL: nil, text: "Спасибо!", createdAt: Date(timeIntervalSince1970: 1709370000)),
+        Comment(id: "com-1", assignmentId: "assign-1", authorId: "user-1", authorName: "Иван Петров", text: "Отличная работа!", createdAt: Date(timeIntervalSince1970: 1709366400)),
+        Comment(id: "com-2", assignmentId: "assign-1", authorId: "user-3", authorName: "Пётр Иванов", text: "Спасибо!", createdAt: Date(timeIntervalSince1970: 1709370000)),
     ]
 
     static let sampleAuthResponse = AuthResponse(

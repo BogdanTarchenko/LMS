@@ -6,7 +6,7 @@ struct CommentRowView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             AvatarView(
-                url: comment.authorAvatarURL,
+                url: nil,
                 firstName: String(comment.authorName.prefix(1)),
                 lastName: String(comment.authorName.split(separator: " ").last?.prefix(1) ?? ""),
                 size: 32
