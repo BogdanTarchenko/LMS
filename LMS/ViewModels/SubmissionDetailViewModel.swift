@@ -11,7 +11,7 @@ final class SubmissionDetailViewModel {
 
     private let apiService: APIServiceProtocol
 
-    init(submission: Submission, apiService: APIServiceProtocol = APIService()) {
+    init(submission: Submission, apiService: APIServiceProtocol = APIService.shared) {
         self.submission = submission
         self.apiService = apiService
         if let grade = submission.grade {

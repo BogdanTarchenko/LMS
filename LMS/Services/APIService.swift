@@ -2,6 +2,8 @@ import Foundation
 
 final class APIService: APIServiceProtocol {
 
+    static let shared = APIService()
+
     private let baseURL: String
     private let session: URLSession
     private var token: String?

@@ -12,7 +12,7 @@ final class CommentsViewModel {
     private let assignmentId: String
     private let apiService: APIServiceProtocol
 
-    init(assignmentId: String, apiService: APIServiceProtocol = APIService()) {
+    init(assignmentId: String, apiService: APIServiceProtocol = APIService.shared) {
         self.assignmentId = assignmentId
         self.apiService = apiService
     }

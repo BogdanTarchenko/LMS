@@ -13,7 +13,7 @@ final class ProfileViewModel {
     private let authManager: AuthManager
     private let apiService: APIServiceProtocol
 
-    init(authManager: AuthManager, apiService: APIServiceProtocol = APIService()) {
+    init(authManager: AuthManager, apiService: APIServiceProtocol = APIService.shared) {
         self.authManager = authManager
         self.apiService = apiService
     }

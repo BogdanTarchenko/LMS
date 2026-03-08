@@ -10,7 +10,7 @@ final class AuthManager {
 
     private static let tokenKey = "lms_auth_token"
 
-    init(apiService: APIServiceProtocol = APIService(), keychainHelper: KeychainHelperProtocol = KeychainHelper.shared) {
+    init(apiService: APIServiceProtocol = APIService.shared, keychainHelper: KeychainHelperProtocol = KeychainHelper.shared) {
         self.apiService = apiService
         self.keychainHelper = keychainHelper
     }

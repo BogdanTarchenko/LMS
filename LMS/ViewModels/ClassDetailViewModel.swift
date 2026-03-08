@@ -14,7 +14,7 @@ final class ClassDetailViewModel {
 
     private let apiService: APIServiceProtocol
 
-    init(classroom: ClassRoom, apiService: APIServiceProtocol = APIService()) {
+    init(classroom: ClassRoom, apiService: APIServiceProtocol = APIService.shared) {
         self.classroom = classroom
         self.apiService = apiService
     }

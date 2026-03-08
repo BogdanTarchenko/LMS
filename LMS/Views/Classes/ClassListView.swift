@@ -6,7 +6,7 @@ struct ClassListView: View {
     @State private var showJoinSheet = false
     @State private var showActionSheet = false
 
-    init(apiService: APIServiceProtocol = APIService()) {
+    init(apiService: APIServiceProtocol = APIService.shared) {
         _viewModel = State(initialValue: ClassListViewModel(apiService: apiService))
     }
 

@@ -18,7 +18,7 @@ final class MembersListViewModel {
 
     private let apiService: APIServiceProtocol
 
-    init(classId: String, myRole: Role, apiService: APIServiceProtocol = APIService()) {
+    init(classId: String, myRole: Role, apiService: APIServiceProtocol = APIService.shared) {
         self.classId = classId
         self.myRole = myRole
         self.apiService = apiService
