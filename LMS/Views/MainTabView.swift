@@ -8,6 +8,9 @@ struct MainTabView: View {
                     .navigationDestination(for: ClassRoom.self) { classroom in
                         ClassDetailView(classroom: classroom)
                     }
+                    .navigationDestination(for: Submission.self) { submission in
+                        SubmissionDetailView(submission: submission)
+                    }
             }
             .tabItem {
                 Label("Классы", systemImage: "book.closed")

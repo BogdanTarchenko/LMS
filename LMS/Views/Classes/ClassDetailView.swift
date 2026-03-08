@@ -70,6 +70,15 @@ struct ClassDetailView: View {
         .sheet(isPresented: $showSettings) {
             ClassSettingsView(viewModel: viewModel)
         }
+        .navigationDestination(for: Assignment.self) { assignment in
+            AssignmentDetailView(assignment: assignment, role: viewModel.classroom.myRole)
+        }
+        .navigationDestination(for: String.self) { value in
+            if value.hasPrefix("members_") {
+                let classId = String(value.dropFirst("members_".count))
+                MembersListView(classId: classId, myRole: viewModel.classroom.myRole)
+            }
+        }
         .task {
             await viewModel.loadAssignments()
         }
