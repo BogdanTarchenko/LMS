@@ -71,8 +71,11 @@ final class APIService: APIServiceProtocol {
         return try await getPage("/classes/\(classId)/assignments")
     }
 
-    func createAssignment(classId: String, title: String, description: String) async throws -> Assignment {
-        let body: [String: Any] = ["title": title, "description": description]
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?) async throws -> Assignment {
+        var body: [String: Any] = ["title": title, "description": description]
+        if let deadline {
+            body["deadline"] = ISO8601DateFormatter().string(from: deadline)
+        }
         return try await post("/classes/\(classId)/assignments", body: body)
     }
 
@@ -94,6 +97,18 @@ final class APIService: APIServiceProtocol {
 
         request.httpBody = body
         return try await perform(request)
+    }
+
+    func getMySubmission(assignmentId: String) async throws -> Submission? {
+        do {
+            return try await get("/assignments/\(assignmentId)/submissions/my")
+        } catch NetworkError.notFound {
+            return nil
+        }
+    }
+
+    func cancelSubmission(assignmentId: String) async throws {
+        try await delete("/assignments/\(assignmentId)/submissions/my")
     }
 
     func getSubmissions(assignmentId: String) async throws -> [Submission] {
@@ -169,8 +184,8 @@ final class APIService: APIServiceProtocol {
 
     private func delete(_ path: String) async throws {
         let request = try makeRequest(path, method: "DELETE")
-        let (_, response) = try await session.data(for: request)
-        try validateResponse(response)
+        let (data, response) = try await session.data(for: request)
+        try validateResponse(response, data: data)
     }
 
     private func makeRequest(_ path: String, method: String) throws -> URLRequest {
@@ -193,7 +208,7 @@ final class APIService: APIServiceProtocol {
         } catch {
             throw NetworkError.noConnection
         }
-        try validateResponse(response)
+        try validateResponse(response, data: data)
         do {
             return try JSONDecoder.lms.decode(T.self, from: data)
         } catch {
@@ -201,7 +216,7 @@ final class APIService: APIServiceProtocol {
         }
     }
 
-    private func validateResponse(_ response: URLResponse) throws {
+    private func validateResponse(_ response: URLResponse, data: Data? = nil) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.unknown("Invalid response")
         }
@@ -210,15 +225,28 @@ final class APIService: APIServiceProtocol {
             return
         case 401:
             throw NetworkError.unauthorized
+        case 403:
+            let message = Self.parseErrorMessage(from: data) ?? "Доступ запрещён"
+            throw NetworkError.forbidden(message)
         case 404:
             throw NetworkError.notFound
         case 409:
-            throw NetworkError.conflict("Конфликт данных")
+            let message = Self.parseErrorMessage(from: data) ?? "Конфликт данных"
+            throw NetworkError.conflict(message)
         case 500...599:
             throw NetworkError.serverError(httpResponse.statusCode)
         default:
             throw NetworkError.unknown("HTTP \(httpResponse.statusCode)")
         }
+    }
+
+    private static func parseErrorMessage(from data: Data?) -> String? {
+        guard let data else { return nil }
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let message = json["message"] as? String {
+            return message
+        }
+        return nil
     }
 }
 

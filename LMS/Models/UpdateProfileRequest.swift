@@ -5,4 +5,5 @@ struct UpdateProfileRequest: Codable {
     var lastName: String?
     var dateOfBirth: String?
     var avatarUrl: String?
+    var avatarBase64: String?
 }

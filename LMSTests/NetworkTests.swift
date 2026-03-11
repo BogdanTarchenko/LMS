@@ -167,10 +167,18 @@ final class MockAPIServiceTests: XCTestCase {
     }
 
     func test_createAssignment_success_returnsAssignment() async throws {
-        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание")
+        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание", deadline: nil)
 
         XCTAssertEqual(assignment.title, "Тест")
         XCTAssertEqual(assignment.description, "Описание")
+    }
+
+    func test_createAssignment_withDeadline_returnsAssignment() async throws {
+        let deadline = Date().addingTimeInterval(3600)
+        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание", deadline: deadline)
+
+        XCTAssertEqual(assignment.title, "Тест")
+        XCTAssertNotNil(assignment.deadline)
     }
 
     // MARK: - Submissions
@@ -187,6 +195,44 @@ final class MockAPIServiceTests: XCTestCase {
         let submissions = try await sut.getSubmissions(assignmentId: "assign-1")
 
         XCTAssertEqual(submissions.count, MockData.sampleSubmissions.count)
+    }
+
+    func test_getMySubmission_success_returnsSubmission() async throws {
+        sut.stubbedMySubmission = MockData.sampleSubmissions[0]
+
+        let submission = try await sut.getMySubmission(assignmentId: "assign-1")
+
+        XCTAssertNotNil(submission)
+        XCTAssertEqual(submission?.id, MockData.sampleSubmissions[0].id)
+    }
+
+    func test_getMySubmission_noSubmission_returnsNil() async throws {
+        sut.stubbedMySubmission = nil
+
+        let submission = try await sut.getMySubmission(assignmentId: "assign-1")
+
+        XCTAssertNil(submission)
+    }
+
+    func test_cancelSubmission_success_doesNotThrow() async throws {
+        try await sut.cancelSubmission(assignmentId: "assign-1")
+    }
+
+    func test_cancelSubmission_forbidden_throwsError() async {
+        sut.shouldThrowError = .forbidden("Нельзя отменить оценённый ответ")
+
+        do {
+            try await sut.cancelSubmission(assignmentId: "assign-1")
+            XCTFail("Expected error")
+        } catch let error as NetworkError {
+            if case .forbidden(let msg) = error {
+                XCTAssertEqual(msg, "Нельзя отменить оценённый ответ")
+            } else {
+                XCTFail("Expected forbidden error")
+            }
+        } catch {
+            XCTFail("Wrong error type")
+        }
     }
 
     func test_gradeSubmission_success_returnsGradedSubmission() async throws {
@@ -264,9 +310,15 @@ final class NetworkErrorTests: XCTestCase {
         XCTAssertEqual(NetworkError.unknown("a"), NetworkError.unknown("a"))
     }
 
+    func test_networkError_forbidden_isEquatable() {
+        XCTAssertEqual(NetworkError.forbidden("msg"), NetworkError.forbidden("msg"))
+        XCTAssertNotEqual(NetworkError.forbidden("a"), NetworkError.forbidden("b"))
+    }
+
     func test_networkError_localizedDescription_isNotEmpty() {
         let errors: [NetworkError] = [
             .unauthorized,
+            .forbidden("forbidden"),
             .notFound,
             .noConnection,
             .serverError(500),

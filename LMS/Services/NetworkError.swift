@@ -2,6 +2,7 @@ import Foundation
 
 enum NetworkError: LocalizedError, Equatable {
     case unauthorized
+    case forbidden(String)
     case notFound
     case noConnection
     case serverError(Int)
@@ -12,7 +13,9 @@ enum NetworkError: LocalizedError, Equatable {
     var errorDescription: String? {
         switch self {
         case .unauthorized:
-            return "Неавторизован. Войдите в систему."
+            return "Не авторизован. Войдите в систему."
+        case .forbidden(let message):
+            return message
         case .notFound:
             return "Ресурс не найден."
         case .noConnection:

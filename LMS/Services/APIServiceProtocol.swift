@@ -11,8 +11,10 @@ protocol APIServiceProtocol {
     func getMembers(classId: String) async throws -> [Member]
     func assignRole(classId: String, userId: String, role: Role) async throws
     func getAssignments(classId: String) async throws -> [Assignment]
-    func createAssignment(classId: String, title: String, description: String) async throws -> Assignment
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?) async throws -> Assignment
     func submitAnswer(assignmentId: String, text: String?, fileData: Data?, fileName: String?) async throws -> Submission
+    func getMySubmission(assignmentId: String) async throws -> Submission?
+    func cancelSubmission(assignmentId: String) async throws
     func getSubmissions(assignmentId: String) async throws -> [Submission]
     func gradeSubmission(submissionId: String, grade: Int) async throws -> Submission
     func getComments(assignmentId: String) async throws -> [Comment]

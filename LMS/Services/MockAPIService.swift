@@ -10,6 +10,7 @@ final class MockAPIService: APIServiceProtocol {
     var stubbedMembers: [Member] = []
     var stubbedSubmissions: [Submission] = []
     var stubbedComments: [Comment] = []
+    var stubbedMySubmission: Submission?
     var stubbedProfile: User?
     var shouldThrowError: NetworkError?
 
@@ -87,12 +88,13 @@ final class MockAPIService: APIServiceProtocol {
         return stubbedAssignments
     }
 
-    func createAssignment(classId: String, title: String, description: String) async throws -> Assignment {
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?) async throws -> Assignment {
         if let error = shouldThrowError { throw error }
         return Assignment(
             id: UUID().uuidString,
             title: title,
             description: description,
+            deadline: deadline,
             createdAt: Date(),
             submissionStatus: nil
         )
@@ -111,6 +113,16 @@ final class MockAPIService: APIServiceProtocol {
             grade: nil,
             submittedAt: Date()
         )
+    }
+
+    func getMySubmission(assignmentId: String) async throws -> Submission? {
+        if let error = shouldThrowError { throw error }
+        return stubbedMySubmission
+    }
+
+    func cancelSubmission(assignmentId: String) async throws {
+        if let error = shouldThrowError { throw error }
+        stubbedMySubmission = nil
     }
 
     func getSubmissions(assignmentId: String) async throws -> [Submission] {

@@ -136,6 +136,141 @@ final class AssignmentStudentViewModelTests: XCTestCase {
         // Then
         XCTAssertFalse(sut.hasSubmitted)
     }
+
+    func test_loadMySubmission_success_populatesSubmission() async {
+        // Given
+        mockAPI.stubbedMySubmission = MockData.sampleSubmissions[0]
+
+        // When
+        await sut.loadMySubmission()
+
+        // Then
+        XCTAssertNotNil(sut.submission)
+        XCTAssertTrue(sut.hasSubmitted)
+        XCTAssertNil(sut.errorMessage)
+    }
+
+    func test_loadMySubmission_noSubmission_submissionIsNil() async {
+        // Given
+        mockAPI.stubbedMySubmission = nil
+
+        // When
+        await sut.loadMySubmission()
+
+        // Then
+        XCTAssertNil(sut.submission)
+        XCTAssertFalse(sut.hasSubmitted)
+    }
+
+    func test_loadMySubmission_networkError_setsErrorMessage() async {
+        // Given
+        mockAPI.shouldThrowError = .serverError(500)
+
+        // When
+        await sut.loadMySubmission()
+
+        // Then
+        XCTAssertNotNil(sut.errorMessage)
+    }
+
+    func test_cancelSubmission_success_clearsSubmission() async {
+        // Given
+        sut.submission = MockData.sampleSubmissions[1]
+
+        // When
+        await sut.cancelSubmission()
+
+        // Then
+        XCTAssertNil(sut.submission)
+        XCTAssertFalse(sut.hasSubmitted)
+    }
+
+    func test_cancelSubmission_networkError_setsErrorMessage() async {
+        // Given
+        sut.submission = MockData.sampleSubmissions[1]
+        mockAPI.shouldThrowError = .forbidden("Нельзя отменить оценённый ответ")
+
+        // When
+        await sut.cancelSubmission()
+
+        // Then
+        XCTAssertNotNil(sut.errorMessage)
+        XCTAssertNotNil(sut.submission)
+    }
+
+    func test_startEditing_copiesTextAndSetsFlag() {
+        // Given
+        sut.submission = MockData.sampleSubmissions[0]
+
+        // When
+        sut.startEditing()
+
+        // Then
+        XCTAssertTrue(sut.isEditing)
+        XCTAssertEqual(sut.answerText, sut.submission?.text ?? "")
+    }
+
+    func test_isDeadlinePassed_withPastDeadline() {
+        // Given
+        let assignment = Assignment(
+            id: "a1", title: "T", description: "D",
+            deadline: Date(timeIntervalSince1970: 0),
+            createdAt: Date()
+        )
+        let vm = AssignmentStudentViewModel(assignment: assignment, apiService: mockAPI)
+
+        // Then
+        XCTAssertTrue(vm.isDeadlinePassed)
+        XCTAssertFalse(vm.canSubmit)
+    }
+
+    func test_isDeadlinePassed_withFutureDeadline() {
+        // Given
+        let assignment = Assignment(
+            id: "a1", title: "T", description: "D",
+            deadline: Date().addingTimeInterval(3600),
+            createdAt: Date()
+        )
+        let vm = AssignmentStudentViewModel(assignment: assignment, apiService: mockAPI)
+
+        // Then
+        XCTAssertFalse(vm.isDeadlinePassed)
+        XCTAssertTrue(vm.canSubmit)
+    }
+
+    func test_isDeadlinePassed_withNoDeadline() {
+        // Given — assignment without deadline
+        let assignment = Assignment(
+            id: "a1", title: "T", description: "D",
+            createdAt: Date()
+        )
+        let vm = AssignmentStudentViewModel(assignment: assignment, apiService: mockAPI)
+
+        // Then
+        XCTAssertFalse(vm.isDeadlinePassed)
+        XCTAssertTrue(vm.canSubmit)
+    }
+
+    func test_canCancel_ungradedSubmission_noDeadlinePassed() {
+        // Given — assignment without deadline, submission without grade
+        let assignment = Assignment(
+            id: "a1", title: "T", description: "D",
+            createdAt: Date()
+        )
+        let vm = AssignmentStudentViewModel(assignment: assignment, apiService: mockAPI)
+        vm.submission = MockData.sampleSubmissions[1] // grade == nil
+
+        // Then
+        XCTAssertTrue(vm.canCancel)
+    }
+
+    func test_canCancel_gradedSubmission_returnsFalse() {
+        // Given
+        sut.submission = MockData.sampleSubmissions[0] // grade == 85
+
+        // Then
+        XCTAssertFalse(sut.canCancel)
+    }
 }
 
 // MARK: - AssignmentTeacherViewModel

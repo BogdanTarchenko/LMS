@@ -164,6 +164,23 @@ final class AssignmentModelTests: XCTestCase {
         XCTAssertEqual(assignment.description, "Решить задачи 1-10")
         XCTAssertNotNil(assignment.createdAt)
         XCTAssertEqual(assignment.submissionStatus, .submitted)
+        XCTAssertNil(assignment.deadline)
+    }
+
+    func test_assignment_decodesFromJSON_withDeadline() throws {
+        let json = """
+        {
+            "id": "assign-1",
+            "title": "Задание",
+            "description": "Описание",
+            "deadline": "2026-04-01T23:59:00Z",
+            "createdAt": "2026-03-01T10:00:00Z"
+        }
+        """.data(using: .utf8)!
+
+        let assignment = try JSONDecoder.lms.decode(Assignment.self, from: json)
+
+        XCTAssertNotNil(assignment.deadline)
     }
 
     func test_assignment_decodesFromJSON_withoutStatus() throws {
@@ -179,6 +196,7 @@ final class AssignmentModelTests: XCTestCase {
         let assignment = try JSONDecoder.lms.decode(Assignment.self, from: json)
 
         XCTAssertNil(assignment.submissionStatus)
+        XCTAssertNil(assignment.deadline)
     }
 
     func test_assignment_encodesAndDecodes_roundTrip() throws {
@@ -186,6 +204,7 @@ final class AssignmentModelTests: XCTestCase {
             id: "a1",
             title: "Test",
             description: "Desc",
+            deadline: Date(timeIntervalSince1970: 1710000000),
             createdAt: Date(timeIntervalSince1970: 1709280000),
             submissionStatus: .graded
         )

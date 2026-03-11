@@ -33,12 +33,7 @@ struct ProfileView: View {
                 Section {
                     HStack {
                         Spacer()
-                        AvatarView(
-                            url: user.avatarURL,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            size: 80
-                        )
+                        avatarSection(vm: vm, user: user)
                         Spacer()
                     }
                 }
@@ -70,9 +65,7 @@ struct ProfileView: View {
                         }
 
                         Button("Отмена") {
-                            vm.isEditing = false
-                            vm.firstName = user.firstName
-                            vm.lastName = user.lastName
+                            vm.cancelEditing()
                         }
                     } else {
                         Button("Редактировать") {
@@ -99,6 +92,44 @@ struct ProfileView: View {
         }
         .task {
             await vm.loadProfile()
+        }
+    }
+
+    @ViewBuilder
+    private func avatarSection(vm: ProfileViewModel, user: User) -> some View {
+        if vm.isEditing {
+            PhotosPicker(selection: Bindable(vm).selectedPhoto, matching: .images) {
+                ZStack(alignment: .bottomTrailing) {
+                    if let avatarImage = vm.avatarImage {
+                        Image(uiImage: avatarImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 80, height: 80)
+                            .clipShape(Circle())
+                    } else {
+                        AvatarView(
+                            url: user.avatarURL,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            size: 80
+                        )
+                    }
+
+                    Image(systemName: "camera.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.white, .blue)
+                }
+            }
+            .onChange(of: vm.selectedPhoto) {
+                Task { await vm.handlePhotoSelection() }
+            }
+        } else {
+            AvatarView(
+                url: user.avatarURL,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                size: 80
+            )
         }
     }
 }

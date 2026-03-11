@@ -18,6 +18,17 @@ struct AssignmentTeacherView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
+                    if let deadline = viewModel.assignment.deadline {
+                        HStack(spacing: 4) {
+                            Image(systemName: "clock")
+                            Text("Дедлайн:")
+                            Text(deadline, style: .date)
+                            Text(deadline, style: .time)
+                        }
+                        .font(.caption)
+                        .foregroundStyle(Date() > deadline ? .red : .orange)
+                    }
+
                     HStack {
                         Text("Сдали:")
                             .font(.subheadline)
@@ -48,6 +59,10 @@ struct AssignmentTeacherView: View {
                         }
                     }
                 }
+            }
+
+            Section {
+                CommentsSection(assignmentId: viewModel.assignment.id)
             }
         }
         .overlay {

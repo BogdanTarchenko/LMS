@@ -30,6 +30,7 @@ enum MockData {
             id: "assign-1",
             title: "Домашнее задание 1",
             description: "Решить задачи 1-10 из учебника",
+            deadline: Date(timeIntervalSince1970: 1710000000),
             createdAt: Date(timeIntervalSince1970: 1709280000),
             submissionStatus: .submitted
         ),
@@ -44,6 +45,7 @@ enum MockData {
             id: "assign-3",
             title: "Лабораторная работа",
             description: "Механика",
+            deadline: Date().addingTimeInterval(7 * 24 * 3600),
             createdAt: Date(timeIntervalSince1970: 1709452800),
             submissionStatus: nil
         ),

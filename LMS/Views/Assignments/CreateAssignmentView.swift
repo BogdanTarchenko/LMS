@@ -36,6 +36,19 @@ struct CreateAssignmentView: View {
                         .accessibilityIdentifier("assignment_description_field")
                 }
 
+                Section("Дедлайн") {
+                    Toggle("Установить дедлайн", isOn: Bindable(viewModel).hasDeadline)
+
+                    if viewModel.hasDeadline {
+                        DatePicker(
+                            "Дата и время",
+                            selection: Bindable(viewModel).deadline,
+                            in: Date()...,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                    }
+                }
+
                 Section {
                     LoadingButton(title: "Опубликовать", isLoading: viewModel.isLoading) {
                         Task {

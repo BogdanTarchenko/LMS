@@ -5,6 +5,8 @@ import Foundation
 final class CreateAssignmentViewModel {
     var title = ""
     var description = ""
+    var hasDeadline = false
+    var deadline = Date().addingTimeInterval(7 * 24 * 3600)
     var titleError: String?
     var errorMessage: String?
     var isLoading = false
@@ -34,7 +36,8 @@ final class CreateAssignmentViewModel {
             _ = try await apiService.createAssignment(
                 classId: classId,
                 title: trimmedTitle,
-                description: description
+                description: description,
+                deadline: hasDeadline ? deadline : nil
             )
             return true
         } catch let error as NetworkError {
