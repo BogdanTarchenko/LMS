@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct AssignmentStudentView: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: AssignmentStudentViewModel
     @State private var showFilePicker = false
     @State private var showAssignmentFilePicker = false
 
     init(assignment: Assignment) {
-        _viewModel = State(initialValue: AssignmentStudentViewModel(assignment: assignment))
+        _viewModel = State(initialValue: AssignmentStudentViewModel(assignment: assignment, apiService: APIService.shared))
     }
 
     var body: some View {
@@ -33,6 +34,7 @@ struct AssignmentStudentView: View {
             .padding(.bottom, 32)
         }
         .task {
+            viewModel.apiService = apiService
             await viewModel.loadMySubmission()
         }
         .sheet(isPresented: $showFilePicker) {

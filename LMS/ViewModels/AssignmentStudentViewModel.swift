@@ -25,7 +25,7 @@ final class AssignmentStudentViewModel {
         return submission.grade == nil && !isDeadlinePassed
     }
 
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(assignment: Assignment, apiService: APIServiceProtocol = APIService.shared) {
         self.assignment = assignment

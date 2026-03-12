@@ -16,7 +16,7 @@ final class MembersListViewModel {
     var teachers: [Member] { members.filter { $0.role == .teacher } }
     var students: [Member] { members.filter { $0.role == .student } }
 
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(classId: String, myRole: Role, apiService: APIServiceProtocol = APIService.shared) {
         self.classId = classId

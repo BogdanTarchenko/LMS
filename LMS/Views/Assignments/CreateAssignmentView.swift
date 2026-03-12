@@ -3,12 +3,13 @@ import UniformTypeIdentifiers
 
 struct CreateAssignmentView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: CreateAssignmentViewModel
     @State private var showFilePicker = false
     var onCreated: (() -> Void)?
 
     init(classId: String, onCreated: (() -> Void)? = nil) {
-        _viewModel = State(initialValue: CreateAssignmentViewModel(classId: classId))
+        _viewModel = State(initialValue: CreateAssignmentViewModel(classId: classId, apiService: APIService.shared))
         self.onCreated = onCreated
     }
 
@@ -39,6 +40,9 @@ struct CreateAssignmentView: View {
                 DocumentPicker(allowsMultipleSelection: true) { files in
                     viewModel.selectedFiles.append(contentsOf: files)
                 }
+            }
+            .onAppear {
+                viewModel.apiService = apiService
             }
         }
     }

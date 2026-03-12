@@ -8,7 +8,7 @@ final class ClassStatsViewModel {
     var errorMessage: String?
 
     private let classId: String
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(classId: String, apiService: APIServiceProtocol = APIService.shared) {
         self.classId = classId

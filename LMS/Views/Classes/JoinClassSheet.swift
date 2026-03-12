@@ -72,6 +72,7 @@ struct JoinClassSheet: View {
                     }
                     .disabled(!isValid)
                     .opacity(isValid ? 1 : 0.5)
+                    .accessibilityIdentifier("join_class_button")
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)

@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct AssignmentTeacherView: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: AssignmentTeacherViewModel
 
     init(assignment: Assignment) {
-        _viewModel = State(initialValue: AssignmentTeacherViewModel(assignment: assignment))
+        _viewModel = State(initialValue: AssignmentTeacherViewModel(assignment: assignment, apiService: APIService.shared))
     }
 
     var body: some View {
@@ -28,6 +29,7 @@ struct AssignmentTeacherView: View {
             }
         }
         .task {
+            viewModel.apiService = apiService
             await viewModel.loadSubmissions()
         }
     }

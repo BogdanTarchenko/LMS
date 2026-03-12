@@ -9,7 +9,7 @@ final class SubmissionDetailViewModel {
     var errorMessage: String?
     var isLoading = false
 
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(submission: Submission, apiService: APIServiceProtocol = APIService.shared) {
         self.submission = submission

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 protocol APIServiceProtocol {
     func login(email: String, password: String) async throws -> AuthResponse
@@ -25,4 +26,17 @@ protocol APIServiceProtocol {
     func updateProfile(request: UpdateProfileRequest) async throws -> User
     func uploadAvatar(imageData: Data, fileName: String) async throws -> User
     func getClassStats(classId: String) async throws -> ClassStats
+}
+
+// MARK: - Environment Key
+
+private struct APIServiceKey: EnvironmentKey {
+    static let defaultValue: APIServiceProtocol = APIService.shared
+}
+
+extension EnvironmentValues {
+    var apiService: APIServiceProtocol {
+        get { self[APIServiceKey.self] }
+        set { self[APIServiceKey.self] = newValue }
+    }
 }

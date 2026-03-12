@@ -3,6 +3,7 @@ import PhotosUI
 
 struct ProfileView: View {
     @Environment(AuthManager.self) private var authManager
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: ProfileViewModel?
     @State private var showLogoutAlert = false
 
@@ -18,7 +19,7 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             if viewModel == nil {
-                viewModel = ProfileViewModel(authManager: authManager)
+                viewModel = ProfileViewModel(authManager: authManager, apiService: apiService)
             }
         }
     }

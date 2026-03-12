@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct ClassStatsView: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: ClassStatsViewModel
 
     init(classId: String) {
-        _viewModel = State(initialValue: ClassStatsViewModel(classId: classId))
+        _viewModel = State(initialValue: ClassStatsViewModel(classId: classId, apiService: APIService.shared))
     }
 
     var body: some View {
@@ -43,7 +44,10 @@ struct ClassStatsView: View {
         }
         .navigationTitle("Статистика")
         .navigationBarTitleDisplayMode(.inline)
-        .task { await viewModel.loadStats() }
+        .task {
+            viewModel.apiService = apiService
+            await viewModel.loadStats()
+        }
     }
 
     private func overviewSection(stats: ClassStats) -> some View {

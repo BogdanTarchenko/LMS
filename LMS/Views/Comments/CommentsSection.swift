@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct CommentsSection: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: CommentsViewModel
 
     init(assignmentId: String) {
-        _viewModel = State(initialValue: CommentsViewModel(assignmentId: assignmentId))
+        _viewModel = State(initialValue: CommentsViewModel(assignmentId: assignmentId, apiService: APIService.shared))
     }
 
     var body: some View {
@@ -67,6 +68,7 @@ struct CommentsSection: View {
             }
         }
         .task {
+            viewModel.apiService = apiService
             await viewModel.loadComments()
         }
     }

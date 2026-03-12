@@ -96,7 +96,6 @@ struct LoginView: View {
                     placeholder: "Пароль",
                     text: Bindable(vm).password,
                     icon: "lock",
-                    textContentType: .password,
                     error: vm.passwordError,
                     accessibilityId: "password_field",
                     errorAccessibilityId: "password_error"
@@ -177,11 +176,14 @@ struct AuthSecureField: View {
                 Group {
                     if isRevealed {
                         TextField(placeholder, text: text)
+                            .textContentType(.oneTimeCode)
                     } else {
                         SecureField(placeholder, text: text)
+                            .textContentType(.oneTimeCode)
                     }
                 }
-                .textContentType(textContentType)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
                 .accessibilityIdentifier(accessibilityId)
 
                 Button {

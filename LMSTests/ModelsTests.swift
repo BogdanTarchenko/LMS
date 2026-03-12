@@ -225,7 +225,7 @@ final class SubmissionModelTests: XCTestCase {
             "studentId": "user-1",
             "studentName": "Иван Петров",
             "answerText": "Мой ответ",
-            "fileUrl": "https://example.com/file.pdf",
+            "fileUrls": ["https://example.com/file.pdf"],
             "grade": 85,
             "submittedAt": "2026-03-01T14:00:00Z"
         }
@@ -237,7 +237,7 @@ final class SubmissionModelTests: XCTestCase {
         XCTAssertEqual(submission.studentId, "user-1")
         XCTAssertEqual(submission.studentName, "Иван Петров")
         XCTAssertEqual(submission.text, "Мой ответ")
-        XCTAssertEqual(submission.fileURL, "https://example.com/file.pdf")
+        XCTAssertEqual(submission.fileUrls, ["https://example.com/file.pdf"])
         XCTAssertEqual(submission.grade, 85)
         XCTAssertNotNil(submission.submittedAt)
     }
@@ -255,7 +255,7 @@ final class SubmissionModelTests: XCTestCase {
         let submission = try JSONDecoder.lms.decode(Submission.self, from: json)
 
         XCTAssertNil(submission.text)
-        XCTAssertNil(submission.fileURL)
+        XCTAssertNil(submission.fileUrls)
         XCTAssertNil(submission.grade)
     }
 }

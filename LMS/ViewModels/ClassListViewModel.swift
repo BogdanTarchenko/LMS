@@ -7,7 +7,7 @@ final class ClassListViewModel {
     var isLoading = false
     var errorMessage: String?
 
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService

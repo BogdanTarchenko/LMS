@@ -10,7 +10,7 @@ final class CommentsViewModel {
     var isSending = false
 
     private let assignmentId: String
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(assignmentId: String, apiService: APIServiceProtocol = APIService.shared) {
         self.assignmentId = assignmentId

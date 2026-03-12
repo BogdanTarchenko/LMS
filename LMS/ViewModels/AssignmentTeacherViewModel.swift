@@ -25,7 +25,7 @@ final class AssignmentTeacherViewModel {
         }
     }
 
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(assignment: Assignment, apiService: APIServiceProtocol = APIService.shared) {
         self.assignment = assignment

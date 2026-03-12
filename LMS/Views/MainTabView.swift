@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @Environment(AuthManager.self) private var authManager
+
     var body: some View {
         TabView {
             NavigationStack {
-                ClassListView()
+                ClassListView(apiService: authManager.apiService)
                     .navigationDestination(for: ClassRoom.self) { classroom in
                         ClassDetailView(classroom: classroom)
                     }

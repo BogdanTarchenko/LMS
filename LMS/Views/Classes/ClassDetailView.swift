@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct ClassDetailView: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: ClassDetailViewModel
     @State private var showCreateAssignment = false
     @State private var showSettings = false
 
     init(classroom: ClassRoom) {
-        _viewModel = State(initialValue: ClassDetailViewModel(classroom: classroom))
+        _viewModel = State(initialValue: ClassDetailViewModel(classroom: classroom, apiService: APIService.shared))
     }
 
     private var canViewStats: Bool {
@@ -96,6 +97,7 @@ struct ClassDetailView: View {
             }
         }
         .task {
+            viewModel.apiService = apiService
             await viewModel.loadAssignments()
         }
     }

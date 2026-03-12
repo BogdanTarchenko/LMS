@@ -68,7 +68,6 @@ struct RegisterView: View {
                         placeholder: "Пароль",
                         text: Bindable(vm).password,
                         icon: "lock",
-                        textContentType: .newPassword,
                         error: vm.passwordError,
                         accessibilityId: "password_field",
                         errorAccessibilityId: "password_error"
@@ -78,7 +77,6 @@ struct RegisterView: View {
                         placeholder: "Подтвердите пароль",
                         text: Bindable(vm).confirmPassword,
                         icon: "lock.shield",
-                        textContentType: .newPassword,
                         error: vm.confirmPasswordError,
                         accessibilityId: "confirm_password_field",
                         errorAccessibilityId: "confirm_password_error"

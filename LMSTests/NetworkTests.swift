@@ -167,7 +167,7 @@ final class MockAPIServiceTests: XCTestCase {
     }
 
     func test_createAssignment_success_returnsAssignment() async throws {
-        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание", deadline: nil)
+        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание", deadline: nil, files: [])
 
         XCTAssertEqual(assignment.title, "Тест")
         XCTAssertEqual(assignment.description, "Описание")
@@ -175,7 +175,7 @@ final class MockAPIServiceTests: XCTestCase {
 
     func test_createAssignment_withDeadline_returnsAssignment() async throws {
         let deadline = Date().addingTimeInterval(3600)
-        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание", deadline: deadline)
+        let assignment = try await sut.createAssignment(classId: "class-1", title: "Тест", description: "Описание", deadline: deadline, files: [])
 
         XCTAssertEqual(assignment.title, "Тест")
         XCTAssertNotNil(assignment.deadline)
@@ -184,7 +184,7 @@ final class MockAPIServiceTests: XCTestCase {
     // MARK: - Submissions
 
     func test_submitAnswer_success_returnsSubmission() async throws {
-        let submission = try await sut.submitAnswer(assignmentId: "assign-1", text: "Ответ", fileData: nil, fileName: nil)
+        let submission = try await sut.submitAnswer(assignmentId: "assign-1", text: "Ответ", files: [])
 
         XCTAssertEqual(submission.text, "Ответ")
     }

@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct SubmissionDetailView: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: SubmissionDetailViewModel
 
     init(submission: Submission) {
-        _viewModel = State(initialValue: SubmissionDetailViewModel(submission: submission))
+        _viewModel = State(initialValue: SubmissionDetailViewModel(submission: submission, apiService: APIService.shared))
     }
 
     var body: some View {
@@ -28,6 +29,9 @@ struct SubmissionDetailView: View {
         }
         .navigationTitle("Ответ студента")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            viewModel.apiService = apiService
+        }
     }
 
     private var studentInfoSection: some View {

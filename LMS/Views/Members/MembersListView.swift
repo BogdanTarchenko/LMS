@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct MembersListView: View {
+    @Environment(\.apiService) private var apiService
     @State private var viewModel: MembersListViewModel
 
     init(classId: String, myRole: Role) {
-        _viewModel = State(initialValue: MembersListViewModel(classId: classId, myRole: myRole))
+        _viewModel = State(initialValue: MembersListViewModel(classId: classId, myRole: myRole, apiService: APIService.shared))
     }
 
     var body: some View {
@@ -49,6 +50,7 @@ struct MembersListView: View {
         }
         .navigationTitle("Участники")
         .task {
+            viewModel.apiService = apiService
             await viewModel.loadMembers()
         }
     }

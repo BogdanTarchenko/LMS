@@ -26,7 +26,7 @@ final class ProfileViewModel {
     private var pendingAvatarFileName: String?
 
     private let authManager: AuthManager
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(authManager: AuthManager, apiService: APIServiceProtocol = APIService.shared) {
         self.authManager = authManager

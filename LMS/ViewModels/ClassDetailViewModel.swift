@@ -12,7 +12,7 @@ final class ClassDetailViewModel {
         classroom.myRole == .owner || classroom.myRole == .teacher
     }
 
-    private let apiService: APIServiceProtocol
+    var apiService: APIServiceProtocol
 
     init(classroom: ClassRoom, apiService: APIServiceProtocol = APIService.shared) {
         self.classroom = classroom
