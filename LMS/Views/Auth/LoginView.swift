@@ -7,33 +7,29 @@ struct LoginView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    heroSection
 
-                Text("LMS")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    VStack(spacing: 24) {
+                        if let vm = viewModel {
+                            loginForm(vm)
+                        }
 
-                Text("Система управления обучением")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                if let vm = viewModel {
-                    loginForm(vm)
-                }
-
-                Spacer()
-
-                HStack {
-                    Text("Нет аккаунта?")
-                        .foregroundStyle(.secondary)
-                    Button("Зарегистрироваться") {
-                        showRegister = true
+                        HStack(spacing: 4) {
+                            Text("Нет аккаунта?")
+                                .foregroundStyle(.secondary)
+                            Button("Зарегистрироваться") {
+                                showRegister = true
+                            }
+                            .fontWeight(.semibold)
+                        }
+                        .font(.subheadline)
                     }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 40)
                 }
-                .font(.callout)
             }
-            .padding()
             .navigationDestination(isPresented: $showRegister) {
                 RegisterView()
             }
@@ -45,6 +41,38 @@ struct LoginView: View {
         }
     }
 
+    private var heroSection: some View {
+        VStack(spacing: 16) {
+            RoundedRectangle(cornerRadius: 28)
+                .fill(
+                    LinearGradient(
+                        colors: [.accentColor, .accentColor.opacity(0.7)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 88, height: 88)
+                .overlay {
+                    Image(systemName: "graduationcap.fill")
+                        .font(.system(size: 40))
+                        .foregroundStyle(.white)
+                }
+                .shadow(color: .accentColor.opacity(0.4), radius: 20, y: 8)
+
+            VStack(spacing: 6) {
+                Text("Добро пожаловать")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                Text("Войдите в систему обучения")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.top, 60)
+        .padding(.bottom, 40)
+    }
+
     @ViewBuilder
     private func loginForm(_ vm: LoginViewModel) -> some View {
         VStack(spacing: 16) {
@@ -52,47 +80,134 @@ struct LoginView: View {
                 ErrorBanner(message: error)
             }
 
-            VStack(alignment: .leading, spacing: 4) {
-                TextField("Email", text: Bindable(vm).email)
-                    .keyboardType(.emailAddress)
-                    .textContentType(.emailAddress)
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .accessibilityIdentifier("email_field")
+            VStack(spacing: 12) {
+                AuthField(
+                    placeholder: "Email",
+                    text: Bindable(vm).email,
+                    icon: "envelope",
+                    keyboardType: .emailAddress,
+                    textContentType: .emailAddress,
+                    error: vm.emailError,
+                    accessibilityId: "email_field",
+                    errorAccessibilityId: "email_error"
+                )
 
-                if let error = vm.emailError {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                        .accessibilityIdentifier("email_error")
-                }
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                SecureField("Пароль", text: Bindable(vm).password)
-                    .textContentType(.password)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .accessibilityIdentifier("password_field")
-
-                if let error = vm.passwordError {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                        .accessibilityIdentifier("password_error")
-                }
+                AuthSecureField(
+                    placeholder: "Пароль",
+                    text: Bindable(vm).password,
+                    icon: "lock",
+                    textContentType: .password,
+                    error: vm.passwordError,
+                    accessibilityId: "password_field",
+                    errorAccessibilityId: "password_error"
+                )
             }
 
             LoadingButton(title: "Войти", isLoading: vm.isLoading) {
-                Task {
-                    await vm.login()
-                }
+                Task { await vm.login() }
             }
             .accessibilityIdentifier("login_button")
+        }
+    }
+}
+
+struct AuthField: View {
+    let placeholder: String
+    let text: Binding<String>
+    let icon: String
+    var keyboardType: UIKeyboardType = .default
+    var textContentType: UITextContentType? = nil
+    let error: String?
+    let accessibilityId: String
+    var errorAccessibilityId: String = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 20)
+
+                TextField(placeholder, text: text)
+                    .keyboardType(keyboardType)
+                    .textContentType(textContentType)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                    .accessibilityIdentifier(accessibilityId)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 15)
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(error != nil ? Color.red.opacity(0.5) : Color.clear, lineWidth: 1)
+            )
+
+            if let error {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+                    .padding(.leading, 4)
+                    .accessibilityIdentifier(errorAccessibilityId)
+            }
+        }
+    }
+}
+
+struct AuthSecureField: View {
+    let placeholder: String
+    let text: Binding<String>
+    let icon: String
+    var textContentType: UITextContentType? = nil
+    let error: String?
+    let accessibilityId: String
+    var errorAccessibilityId: String = ""
+    @State private var isRevealed = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 20)
+
+                Group {
+                    if isRevealed {
+                        TextField(placeholder, text: text)
+                    } else {
+                        SecureField(placeholder, text: text)
+                    }
+                }
+                .textContentType(textContentType)
+                .accessibilityIdentifier(accessibilityId)
+
+                Button {
+                    isRevealed.toggle()
+                } label: {
+                    Image(systemName: isRevealed ? "eye.slash" : "eye")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 15)
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(error != nil ? Color.red.opacity(0.5) : Color.clear, lineWidth: 1)
+            )
+
+            if let error {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+                    .padding(.leading, 4)
+                    .accessibilityIdentifier(errorAccessibilityId)
+            }
         }
     }
 }

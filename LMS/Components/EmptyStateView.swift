@@ -6,11 +6,25 @@ struct EmptyStateView: View {
     let description: String
 
     var body: some View {
-        ContentUnavailableView {
-            Label(title, systemImage: icon)
-        } description: {
-            Text(description)
+        VStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 52, weight: .light))
+                .foregroundStyle(.tertiary)
+
+            VStack(spacing: 6) {
+                Text(title)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
         }
+        .padding(40)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

@@ -5,6 +5,7 @@ struct Comment: Codable, Identifiable, Hashable {
     var assignmentId: String?
     var authorId: String
     var authorName: String
+    var authorAvatarUrl: String?
     var text: String
     var createdAt: Date
 }

@@ -9,4 +9,5 @@ struct Member: Codable, Identifiable, Hashable {
     var email: String
     var role: Role
     var joinedAt: Date?
+    var avatarUrl: String?
 }

@@ -4,14 +4,34 @@ struct SubmissionRowView: View {
     let submission: Submission
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(submission.studentName)
-                    .font(.body)
+        HStack(spacing: 12) {
+            AvatarView(
+                url: submission.studentAvatarUrl,
+                firstName: submission.studentName.components(separatedBy: " ").first ?? "",
+                lastName: submission.studentName.components(separatedBy: " ").last ?? "",
+                size: 40
+            )
 
-                Text(submission.submittedAt, style: .date)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(submission.studentName)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+
+                HStack(spacing: 6) {
+                    Image(systemName: "clock")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text(submission.submittedAt, style: .date)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if let fileUrls = submission.fileUrls, !fileUrls.isEmpty {
+                        Image(systemName: "paperclip")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             Spacer()
@@ -22,6 +42,7 @@ struct SubmissionRowView: View {
                 StatusBadge(status: .submitted)
             }
         }
+        .padding(.vertical, 4)
     }
 }
 

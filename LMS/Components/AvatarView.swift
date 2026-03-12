@@ -12,17 +12,37 @@ struct AvatarView: View {
         return "\(f)\(l)".uppercased()
     }
 
+    private var resolvedURL: URL? {
+        guard let url else { return nil }
+        return APIConfig.resolveFileURL(url)
+    }
+
+    private var gradientColors: [Color] {
+        let hash = abs((firstName + lastName).hashValue)
+        let palettes: [[Color]] = [
+            [.blue, .cyan],
+            [.purple, .pink],
+            [.orange, .red],
+            [.teal, .green],
+            [.indigo, .blue],
+        ]
+        return palettes[hash % palettes.count]
+    }
+
     var body: some View {
-        if let url, let imageURL = URL(string: url) {
-            AsyncImage(url: imageURL) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                initialsView
+        if let imageURL = resolvedURL {
+            AsyncImage(url: imageURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: size, height: size)
+                        .clipShape(Circle())
+                default:
+                    initialsView
+                }
             }
-            .frame(width: size, height: size)
-            .clipShape(Circle())
         } else {
             initialsView
         }
@@ -30,19 +50,27 @@ struct AvatarView: View {
 
     private var initialsView: some View {
         Circle()
-            .fill(Color.accentColor.opacity(0.2))
+            .fill(
+                LinearGradient(
+                    colors: gradientColors,
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
             .frame(width: size, height: size)
             .overlay {
                 Text(initials)
-                    .font(.system(size: size * 0.35, weight: .semibold))
-                    .foregroundStyle(Color.accentColor)
+                    .font(.system(size: size * 0.36, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
             }
     }
 }
 
 #Preview {
-    VStack(spacing: 16) {
-        AvatarView(url: nil, firstName: "Иван", lastName: "Петров")
-        AvatarView(url: "https://example.com/avatar.jpg", firstName: "А", lastName: "Б", size: 60)
+    HStack(spacing: 16) {
+        AvatarView(url: nil, firstName: "Иван", lastName: "Петров", size: 56)
+        AvatarView(url: nil, firstName: "Анна", lastName: "Смирнова", size: 56)
+        AvatarView(url: nil, firstName: "Максим", lastName: "Козлов", size: 56)
     }
+    .padding()
 }

@@ -52,19 +52,19 @@ enum MockData {
     ]
 
     static let sampleMembers: [Member] = [
-        Member(userId: "user-1", firstName: "Иван", lastName: "Петров", email: "ivan@test.com", role: .owner),
-        Member(userId: "user-2", firstName: "Анна", lastName: "Сидорова", email: "anna@test.com", role: .teacher),
-        Member(userId: "user-3", firstName: "Пётр", lastName: "Иванов", email: "petr@test.com", role: .student),
+        Member(userId: "user-1", firstName: "Иван", lastName: "Петров", email: "ivan@test.com", role: .owner, avatarUrl: "https://example.com/avatar.jpg"),
+        Member(userId: "user-2", firstName: "Анна", lastName: "Сидорова", email: "anna@test.com", role: .teacher, avatarUrl: nil),
+        Member(userId: "user-3", firstName: "Пётр", lastName: "Иванов", email: "petr@test.com", role: .student, avatarUrl: nil),
     ]
 
     static let sampleSubmissions: [Submission] = [
-        Submission(id: "sub-1", studentId: "user-3", studentName: "Пётр Иванов", text: "Мой ответ на задание", fileURL: nil, grade: 85, submittedAt: Date(timeIntervalSince1970: 1709366400)),
-        Submission(id: "sub-2", studentId: "user-4", studentName: "Мария Козлова", text: nil, fileURL: "https://example.com/file.pdf", grade: nil, submittedAt: Date(timeIntervalSince1970: 1709452800)),
+        Submission(id: "sub-1", studentId: "user-3", studentName: "Пётр Иванов", studentAvatarUrl: nil, text: "Мой ответ на задание", fileUrls: nil, grade: 85, submittedAt: Date(timeIntervalSince1970: 1709366400)),
+        Submission(id: "sub-2", studentId: "user-4", studentName: "Мария Козлова", studentAvatarUrl: nil, text: nil, fileUrls: ["https://example.com/file.pdf"], grade: nil, submittedAt: Date(timeIntervalSince1970: 1709452800)),
     ]
 
     static let sampleComments: [Comment] = [
-        Comment(id: "com-1", assignmentId: "assign-1", authorId: "user-1", authorName: "Иван Петров", text: "Отличная работа!", createdAt: Date(timeIntervalSince1970: 1709366400)),
-        Comment(id: "com-2", assignmentId: "assign-1", authorId: "user-3", authorName: "Пётр Иванов", text: "Спасибо!", createdAt: Date(timeIntervalSince1970: 1709370000)),
+        Comment(id: "com-1", assignmentId: "assign-1", authorId: "user-1", authorName: "Иван Петров", authorAvatarUrl: "https://example.com/avatar.jpg", text: "Отличная работа!", createdAt: Date(timeIntervalSince1970: 1709366400)),
+        Comment(id: "com-2", assignmentId: "assign-1", authorId: "user-3", authorName: "Пётр Иванов", authorAvatarUrl: nil, text: "Спасибо!", createdAt: Date(timeIntervalSince1970: 1709370000)),
     ]
 
     static let sampleAuthResponse = AuthResponse(

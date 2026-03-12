@@ -1,225 +1,268 @@
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct AssignmentStudentView: View {
     @State private var viewModel: AssignmentStudentViewModel
     @State private var showFilePicker = false
+    @State private var showAssignmentFilePicker = false
 
     init(assignment: Assignment) {
         _viewModel = State(initialValue: AssignmentStudentViewModel(assignment: assignment))
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
                 assignmentInfoSection
-
-                Divider()
 
                 if let error = viewModel.errorMessage {
                     ErrorBanner(message: error)
+                        .padding(.horizontal, 20)
                 }
 
                 if viewModel.isLoading && viewModel.submission == nil && !viewModel.isEditing {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
+                    ProgressView()
+                        .padding(40)
                 } else if viewModel.hasSubmitted && !viewModel.isEditing {
                     submittedSection
                 } else {
                     submitFormSection
                 }
 
-                Divider()
-
-                CommentsSection(assignmentId: viewModel.assignment.id)
+                commentsSection
             }
-            .padding()
+            .padding(.bottom, 32)
         }
         .task {
             await viewModel.loadMySubmission()
         }
         .sheet(isPresented: $showFilePicker) {
-            DocumentPicker { data, name in
-                viewModel.fileData = data
-                viewModel.fileName = name
+            DocumentPicker(allowsMultipleSelection: true) { files in
+                viewModel.addFiles(files)
             }
         }
     }
 
-    // MARK: - Assignment Info
-
-    @ViewBuilder
     private var assignmentInfoSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(viewModel.assignment.title)
-                .font(.title2)
-                .fontWeight(.semibold)
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(viewModel.assignment.title)
+                    .font(.title2)
+                    .fontWeight(.bold)
 
-            Text(viewModel.assignment.createdAt, style: .date)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            if let deadline = viewModel.assignment.deadline {
-                HStack(spacing: 4) {
-                    Image(systemName: "clock")
-                    Text("Дедлайн:")
-                    Text(deadline, style: .date)
-                    Text(deadline, style: .time)
+                if let deadline = viewModel.assignment.deadline {
+                    DeadlineBadge(deadline: deadline)
                 }
-                .font(.caption)
-                .foregroundStyle(viewModel.isDeadlinePassed ? .red : .orange)
-            }
 
-            if !viewModel.assignment.description.isEmpty {
-                Text(viewModel.assignment.description)
-                    .font(.body)
+                if !viewModel.assignment.description.isEmpty {
+                    Text(viewModel.assignment.description)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                }
+
+                if let fileUrls = viewModel.assignment.fileUrls, !fileUrls.isEmpty {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label("Прикреплённые файлы", systemImage: "paperclip")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+                        ForEach(fileUrls, id: \.self) { url in
+                            FileAttachmentView(fileURLString: url)
+                        }
+                    }
+                }
             }
+            .padding(20)
         }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
     }
 
-    // MARK: - Submitted State
-
-    @ViewBuilder
     private var submittedSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Ваш ответ")
-                .font(.headline)
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                Label("Ваш ответ", systemImage: "checkmark.circle.fill")
+                    .font(.headline)
+                    .foregroundStyle(.green)
 
-            if let submission = viewModel.submission {
-                if let text = submission.text {
-                    Text(text)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.systemGray6))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-
-                if let fileURL = submission.fileURL {
-                    Label(fileURL.components(separatedBy: "/").last ?? "Файл", systemImage: "paperclip")
-                        .font(.subheadline)
-                        .foregroundStyle(.blue)
-                }
-
-                if let grade = submission.grade {
-                    HStack {
-                        Text("Оценка:")
-                            .font(.headline)
-                        GradeView(grade: grade)
+                if let submission = viewModel.submission {
+                    if let text = submission.text {
+                        Text(text)
+                            .font(.body)
+                            .padding(14)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
-                } else {
-                    StatusBadge(status: .submitted)
-                }
 
-                if viewModel.canSubmit {
-                    HStack(spacing: 12) {
-                        if submission.grade == nil {
-                            Button("Редактировать") {
-                                viewModel.startEditing()
-                            }
-                        }
-
-                        if viewModel.canCancel {
-                            Button("Отменить ответ", role: .destructive) {
-                                Task { await viewModel.cancelSubmission() }
+                    if let fileUrls = submission.fileUrls, !fileUrls.isEmpty {
+                        VStack(spacing: 6) {
+                            ForEach(fileUrls, id: \.self) { url in
+                                FileAttachmentView(fileURLString: url)
                             }
                         }
                     }
-                    .padding(.top, 4)
+
+                    if let grade = submission.grade {
+                        HStack {
+                            Text("Оценка")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            GradeView(grade: grade)
+                        }
+                        .padding(14)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    } else {
+                        StatusBadge(status: .submitted)
+                    }
+
+                    if viewModel.canSubmit {
+                        HStack(spacing: 12) {
+                            if submission.grade == nil {
+                                Button {
+                                    viewModel.startEditing()
+                                } label: {
+                                    Label("Редактировать", systemImage: "pencil")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 12)
+                                        .background(Color.accentColor.opacity(0.1))
+                                        .foregroundStyle(Color.accentColor)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                }
+                            }
+
+                            if viewModel.canCancel {
+                                Button(role: .destructive) {
+                                    Task { await viewModel.cancelSubmission() }
+                                } label: {
+                                    Label("Отменить", systemImage: "xmark")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 12)
+                                        .background(Color.red.opacity(0.1))
+                                        .foregroundStyle(.red)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                }
+                            }
+                        }
+                    }
                 }
             }
+            .padding(20)
         }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
+        .padding(.horizontal, 16)
     }
 
-    // MARK: - Submit / Edit Form
-
-    @ViewBuilder
     private var submitFormSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(viewModel.isEditing ? "Редактирование ответа" : "Ваш ответ")
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                Label(
+                    viewModel.isEditing ? "Редактирование ответа" : "Ваш ответ",
+                    systemImage: viewModel.isEditing ? "pencil.circle.fill" : "square.and.pencil"
+                )
                 .font(.headline)
 
-            if viewModel.isDeadlinePassed {
-                Text("Дедлайн прошёл. Сдача невозможна.")
-                    .foregroundStyle(.red)
-                    .font(.subheadline)
-            } else {
-                TextEditor(text: Bindable(viewModel).answerText)
-                    .frame(minHeight: 120)
-                    .padding(4)
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .accessibilityIdentifier("answer_text_field")
-
-                HStack {
-                    Button {
-                        showFilePicker = true
-                    } label: {
-                        Label(viewModel.fileName ?? "Прикрепить файл", systemImage: "paperclip")
+                if viewModel.isDeadlinePassed {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundStyle(.red)
+                        Text("Дедлайн прошёл. Сдача невозможна.")
+                            .font(.subheadline)
+                            .foregroundStyle(.red)
                     }
+                    .padding(14)
+                    .background(Color.red.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                } else {
+                    TextEditor(text: Bindable(viewModel).answerText)
+                        .frame(minHeight: 130)
+                        .padding(10)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .accessibilityIdentifier("answer_text_field")
 
-                    if viewModel.fileName != nil {
-                        Button(role: .destructive) {
-                            viewModel.fileData = nil
-                            viewModel.fileName = nil
+                    VStack(spacing: 8) {
+                        ForEach(Array(viewModel.attachedFiles.enumerated()), id: \.offset) { index, file in
+                            HStack(spacing: 10) {
+                                Image(systemName: "doc.fill")
+                                    .foregroundStyle(Color.accentColor)
+                                Text(file.fileName)
+                                    .font(.subheadline)
+                                    .lineLimit(1)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Button {
+                                    viewModel.removeFile(at: index)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundStyle(.red.opacity(0.7))
+                                }
+                            }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 10)
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+
+                        Button {
+                            showFilePicker = true
                         } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.red)
+                            Label("Прикрепить файл", systemImage: "paperclip")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 10)
+                                .background(Color(.secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .foregroundStyle(.secondary)
                         }
                     }
-                }
 
-                HStack(spacing: 12) {
-                    LoadingButton(title: viewModel.isEditing ? "Сохранить" : "Отправить", isLoading: viewModel.isLoading) {
-                        Task { await viewModel.submitAnswer() }
-                    }
-                    .accessibilityIdentifier("submit_answer_button")
+                    HStack(spacing: 12) {
+                        LoadingButton(
+                            title: viewModel.isEditing ? "Сохранить" : "Отправить",
+                            isLoading: viewModel.isLoading
+                        ) {
+                            Task { await viewModel.submitAnswer() }
+                        }
+                        .accessibilityIdentifier("submit_answer_button")
 
-                    if viewModel.isEditing {
-                        Button("Отмена") {
-                            viewModel.isEditing = false
+                        if viewModel.isEditing {
+                            Button("Отмена") {
+                                viewModel.isEditing = false
+                            }
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                         }
                     }
                 }
             }
+            .padding(20)
         }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
+        .padding(.horizontal, 16)
+    }
+
+    private var commentsSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            CommentsSection(assignmentId: viewModel.assignment.id)
+                .padding(20)
+        }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
+        .padding(.horizontal, 16)
     }
 }
 
-// MARK: - Document Picker
-
-struct DocumentPicker: UIViewControllerRepresentable {
-    let onPick: (Data, String) -> Void
-
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.item])
-        picker.delegate = context.coordinator
-        return picker
-    }
-
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(onPick: onPick)
-    }
-
-    class Coordinator: NSObject, UIDocumentPickerDelegate {
-        let onPick: (Data, String) -> Void
-
-        init(onPick: @escaping (Data, String) -> Void) {
-            self.onPick = onPick
-        }
-
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            guard let url = urls.first else { return }
-            guard url.startAccessingSecurityScopedResource() else { return }
-            defer { url.stopAccessingSecurityScopedResource() }
-
-            if let data = try? Data(contentsOf: url) {
-                onPick(data, url.lastPathComponent)
-            }
-        }
-    }
-}

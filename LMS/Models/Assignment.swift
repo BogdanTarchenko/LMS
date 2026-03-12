@@ -8,4 +8,5 @@ struct Assignment: Codable, Identifiable, Hashable {
     var createdAt: Date
     var submissionStatus: SubmissionStatus?
     var grade: Int?
+    var fileUrls: [String]?
 }

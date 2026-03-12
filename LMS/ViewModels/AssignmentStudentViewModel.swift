@@ -5,8 +5,7 @@ import Foundation
 final class AssignmentStudentViewModel {
     let assignment: Assignment
     var answerText = ""
-    var fileData: Data?
-    var fileName: String?
+    var attachedFiles: [FileData] = []
     var submission: Submission?
     var errorMessage: String?
     var isLoading = false
@@ -19,9 +18,7 @@ final class AssignmentStudentViewModel {
         return Date() > deadline
     }
 
-    var canSubmit: Bool {
-        !isDeadlinePassed
-    }
+    var canSubmit: Bool { !isDeadlinePassed }
 
     var canCancel: Bool {
         guard let submission else { return false }
@@ -33,6 +30,15 @@ final class AssignmentStudentViewModel {
     init(assignment: Assignment, apiService: APIServiceProtocol = APIService.shared) {
         self.assignment = assignment
         self.apiService = apiService
+    }
+
+    func addFiles(_ files: [FileData]) {
+        attachedFiles.append(contentsOf: files)
+    }
+
+    func removeFile(at index: Int) {
+        guard index < attachedFiles.count else { return }
+        attachedFiles.remove(at: index)
     }
 
     func loadMySubmission() async {
@@ -53,7 +59,7 @@ final class AssignmentStudentViewModel {
         errorMessage = nil
 
         let trimmedText = answerText.trimmingCharacters(in: .whitespaces)
-        guard !trimmedText.isEmpty || fileData != nil else {
+        guard !trimmedText.isEmpty || !attachedFiles.isEmpty else {
             errorMessage = "Введите текст ответа или прикрепите файл"
             return
         }
@@ -65,13 +71,11 @@ final class AssignmentStudentViewModel {
             submission = try await apiService.submitAnswer(
                 assignmentId: assignment.id,
                 text: trimmedText.isEmpty ? nil : trimmedText,
-                fileData: fileData,
-                fileName: fileName
+                files: attachedFiles
             )
             isEditing = false
             answerText = ""
-            fileData = nil
-            fileName = nil
+            attachedFiles = []
         } catch let error as NetworkError {
             errorMessage = error.localizedDescription
         } catch {
@@ -97,8 +101,7 @@ final class AssignmentStudentViewModel {
 
     func startEditing() {
         answerText = submission?.text ?? ""
-        fileData = nil
-        fileName = nil
+        attachedFiles = []
         isEditing = true
     }
 }

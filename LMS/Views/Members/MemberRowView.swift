@@ -6,24 +6,26 @@ struct MemberRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             AvatarView(
-                url: nil,
+                url: member.avatarUrl,
                 firstName: member.firstName,
                 lastName: member.lastName,
-                size: 36
+                size: 44
             )
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text("\(member.firstName) \(member.lastName)")
-                    .font(.body)
-                Text(member.email)
-                    .font(.caption)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(member.lastName)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                Text(member.firstName)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
 
             Spacer()
 
-            RoleBadge(role: member.role)
+            RoleIcon(role: member.role)
         }
+        .padding(.vertical, 4)
     }
 }
 

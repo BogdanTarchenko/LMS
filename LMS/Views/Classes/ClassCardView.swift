@@ -3,32 +3,63 @@ import SwiftUI
 struct ClassCardView: View {
     let classroom: ClassRoom
 
+    private var roleColor: Color {
+        switch classroom.myRole {
+        case .owner: .purple
+        case .teacher: .blue
+        case .student: .teal
+        }
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
+        HStack(spacing: 16) {
+            RoundedRectangle(cornerRadius: 14)
+                .fill(
+                    LinearGradient(
+                        colors: [roleColor, roleColor.opacity(0.6)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 52, height: 52)
+                .overlay {
+                    Image(systemName: "book.closed.fill")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                }
+
+            VStack(alignment: .leading, spacing: 4) {
                 Text(classroom.name)
                     .font(.headline)
-                Spacer()
-                RoleBadge(role: classroom.myRole)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                HStack(spacing: 6) {
+                    Image(systemName: "person.2.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text("\(classroom.memberCount) участников")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
-            HStack {
-                Image(systemName: "person.2")
-                    .foregroundStyle(.secondary)
-                Text("\(classroom.memberCount)")
-                    .foregroundStyle(.secondary)
-                    .font(.subheadline)
-            }
+            Spacer()
+
+            RoleIcon(role: classroom.myRole)
         }
-        .padding()
+        .padding(16)
         .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .shadow(color: .black.opacity(0.06), radius: 10, y: 4)
     }
 }
 
 #Preview {
-    ClassCardView(classroom: MockData.sampleClasses[0])
-        .padding()
-        .background(Color(.systemGroupedBackground))
+    VStack(spacing: 12) {
+        ClassCardView(classroom: MockData.sampleClasses[0])
+        ClassCardView(classroom: MockData.sampleClasses[1])
+    }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

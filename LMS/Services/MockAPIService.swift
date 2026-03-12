@@ -70,6 +70,11 @@ final class MockAPIService: APIServiceProtocol {
         return ClassRoom(id: id, name: name, code: "ABCD1234", myRole: .owner, memberCount: 5)
     }
 
+    func regenerateCode(id: String) async throws -> ClassRoom {
+        if let error = shouldThrowError { throw error }
+        return ClassRoom(id: id, name: "Class", code: "NEWCODE1", myRole: .owner, memberCount: 5)
+    }
+
     // MARK: - Members
 
     func getMembers(classId: String) async throws -> [Member] {
@@ -81,6 +86,10 @@ final class MockAPIService: APIServiceProtocol {
         if let error = shouldThrowError { throw error }
     }
 
+    func removeMember(classId: String, userId: String) async throws {
+        if let error = shouldThrowError { throw error }
+    }
+
     // MARK: - Assignments
 
     func getAssignments(classId: String) async throws -> [Assignment] {
@@ -88,7 +97,7 @@ final class MockAPIService: APIServiceProtocol {
         return stubbedAssignments
     }
 
-    func createAssignment(classId: String, title: String, description: String, deadline: Date?) async throws -> Assignment {
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?, files: [FileData]) async throws -> Assignment {
         if let error = shouldThrowError { throw error }
         return Assignment(
             id: UUID().uuidString,
@@ -96,20 +105,21 @@ final class MockAPIService: APIServiceProtocol {
             description: description,
             deadline: deadline,
             createdAt: Date(),
-            submissionStatus: nil
+            submissionStatus: nil,
+            fileUrls: files.map { "https://example.com/files/\($0.fileName)" }
         )
     }
 
     // MARK: - Submissions
 
-    func submitAnswer(assignmentId: String, text: String?, fileData: Data?, fileName: String?) async throws -> Submission {
+    func submitAnswer(assignmentId: String, text: String?, files: [FileData]) async throws -> Submission {
         if let error = shouldThrowError { throw error }
         return Submission(
             id: UUID().uuidString,
             studentId: MockData.sampleUser.id,
             studentName: "\(MockData.sampleUser.firstName) \(MockData.sampleUser.lastName)",
             text: text,
-            fileURL: fileName.map { "https://example.com/files/\($0)" },
+            fileUrls: files.map { "https://example.com/files/\($0.fileName)" },
             grade: nil,
             submittedAt: Date()
         )
@@ -132,12 +142,16 @@ final class MockAPIService: APIServiceProtocol {
 
     func gradeSubmission(submissionId: String, grade: Int) async throws -> Submission {
         if let error = shouldThrowError { throw error }
+        if let index = stubbedSubmissions.firstIndex(where: { $0.id == submissionId }) {
+            stubbedSubmissions[index].grade = grade
+            return stubbedSubmissions[index]
+        }
         return Submission(
             id: submissionId,
             studentId: "user-1",
             studentName: "Студент",
             text: "Ответ",
-            fileURL: nil,
+            fileUrls: nil,
             grade: grade,
             submittedAt: Date()
         )
@@ -172,8 +186,36 @@ final class MockAPIService: APIServiceProtocol {
     func updateProfile(request: UpdateProfileRequest) async throws -> User {
         if let error = shouldThrowError { throw error }
         var user = stubbedProfile ?? MockData.sampleUser
-        if let firstName = request.firstName { user.firstName = firstName }
-        if let lastName = request.lastName { user.lastName = lastName }
+        user.firstName = request.firstName
+        user.lastName = request.lastName
+        if let avatarUrl = request.avatarUrl {
+            user.avatarURL = avatarUrl
+        }
         return user
+    }
+
+    func uploadAvatar(imageData: Data, fileName: String) async throws -> User {
+        if let error = shouldThrowError { throw error }
+        var user = stubbedProfile ?? MockData.sampleUser
+        user.avatarURL = "https://example.com/avatars/\(fileName)"
+        stubbedProfile = user
+        return user
+    }
+
+    func getClassStats(classId: String) async throws -> ClassStats {
+        if let error = shouldThrowError { throw error }
+        return ClassStats(
+            classId: classId,
+            className: "Математика 101",
+            totalAssignments: 3,
+            totalStudents: 3,
+            classAverageGrade: 78.5,
+            submissionRate: 85.0,
+            students: [
+                StudentStat(studentId: "user-3", studentName: "Пётр Иванов", avatarUrl: nil, submittedCount: 3, gradedCount: 2, averageGrade: 85.0, missedCount: 0),
+                StudentStat(studentId: "user-4", studentName: "Мария Козлова", avatarUrl: nil, submittedCount: 2, gradedCount: 1, averageGrade: 72.0, missedCount: 1),
+                StudentStat(studentId: "user-5", studentName: "Алексей Смирнов", avatarUrl: nil, submittedCount: 0, gradedCount: 0, averageGrade: nil, missedCount: 2),
+            ]
+        )
     }
 }

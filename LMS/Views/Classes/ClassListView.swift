@@ -21,7 +21,7 @@ struct ClassListView: View {
                     description: "Создайте класс или присоединитесь по коду"
                 )
             } else {
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 12) {
                         ForEach(viewModel.classes) { classroom in
                             NavigationLink(value: classroom) {
@@ -30,8 +30,9 @@ struct ClassListView: View {
                             .buttonStyle(.plain)
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 16)
                     .padding(.top, 8)
+                    .padding(.bottom, 20)
                 }
                 .refreshable {
                     await viewModel.loadClasses()
@@ -44,18 +45,16 @@ struct ClassListView: View {
                 Button {
                     showActionSheet = true
                 } label: {
-                    Image(systemName: "plus")
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title3)
+                        .symbolRenderingMode(.hierarchical)
                 }
                 .accessibilityIdentifier("add_class_button")
             }
         }
         .confirmationDialog("Добавить класс", isPresented: $showActionSheet) {
-            Button("Создать класс") {
-                showCreateSheet = true
-            }
-            Button("Присоединиться по коду") {
-                showJoinSheet = true
-            }
+            Button("Создать класс") { showCreateSheet = true }
+            Button("Присоединиться по коду") { showJoinSheet = true }
         }
         .sheet(isPresented: $showCreateSheet) {
             CreateClassSheet(viewModel: viewModel)
@@ -69,9 +68,7 @@ struct ClassListView: View {
         )) {
             Button("OK") { viewModel.errorMessage = nil }
         } message: {
-            if let msg = viewModel.errorMessage {
-                Text(msg)
-            }
+            if let msg = viewModel.errorMessage { Text(msg) }
         }
         .task {
             await viewModel.loadClasses()

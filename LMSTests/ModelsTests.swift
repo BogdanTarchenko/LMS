@@ -393,8 +393,7 @@ final class UpdateProfileRequestModelTests: XCTestCase {
         let request = UpdateProfileRequest(
             firstName: "Новое",
             lastName: "Имя",
-            dateOfBirth: "1999-05-20",
-            avatarUrl: nil
+            dateOfBirth: "1999-05-20"
         )
 
         let data = try JSONEncoder.lms.encode(request)
@@ -403,6 +402,19 @@ final class UpdateProfileRequestModelTests: XCTestCase {
         XCTAssertEqual(dict["firstName"] as? String, "Новое")
         XCTAssertEqual(dict["lastName"] as? String, "Имя")
         XCTAssertEqual(dict["dateOfBirth"] as? String, "1999-05-20")
+    }
+
+    func test_updateProfileRequest_encodesToJSON_withAvatarUrl() throws {
+        let request = UpdateProfileRequest(
+            firstName: "Иван",
+            lastName: "Петров",
+            avatarUrl: "https://example.com/avatar.jpg"
+        )
+
+        let data = try JSONEncoder.lms.encode(request)
+        let dict = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+
+        XCTAssertEqual(dict["avatarUrl"] as? String, "https://example.com/avatar.jpg")
     }
 }
 

@@ -4,15 +4,16 @@ struct Submission: Codable, Identifiable, Hashable {
     let id: String
     var studentId: String
     var studentName: String
+    var studentAvatarUrl: String?
     var text: String?
-    var fileURL: String?
+    var fileUrls: [String]?
     var grade: Int?
     var submittedAt: Date
 
     enum CodingKeys: String, CodingKey {
-        case id, studentId, studentName
+        case id, studentId, studentName, studentAvatarUrl
         case text = "answerText"
-        case fileURL = "fileUrl"
+        case fileUrls
         case grade, submittedAt
     }
 }

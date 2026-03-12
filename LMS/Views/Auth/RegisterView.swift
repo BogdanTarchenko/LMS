@@ -26,133 +26,136 @@ struct RegisterView: View {
 
     @ViewBuilder
     private func registerForm(_ vm: RegisterViewModel) -> some View {
-        ScrollView {
-            VStack(spacing: 16) {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 24) {
                 if let error = vm.errorMessage {
                     ErrorBanner(message: error)
                 }
 
-                // Avatar
-                PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                    if let data = vm.avatarData, let uiImage = UIImage(data: data) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .clipShape(Circle())
-                    } else {
-                        Circle()
-                            .fill(Color(.systemGray5))
-                            .frame(width: 80, height: 80)
-                            .overlay {
-                                Image(systemName: "camera.fill")
-                                    .foregroundStyle(.secondary)
-                            }
-                    }
-                }
-                .accessibilityIdentifier("avatar_picker")
-                .onChange(of: selectedPhoto) { _, newValue in
-                    Task {
-                        if let data = try? await newValue?.loadTransferable(type: Data.self) {
-                            vm.avatarData = data
-                        }
-                    }
-                }
+                avatarPicker(vm)
 
-                // Name fields
-                validatedField("Имя", text: Bindable(vm).firstName, error: vm.firstNameError, id: "first_name_field")
-                validatedField("Фамилия", text: Bindable(vm).lastName, error: vm.lastNameError, id: "last_name_field")
+                VStack(spacing: 12) {
+                    AuthField(
+                        placeholder: "Имя",
+                        text: Bindable(vm).firstName,
+                        icon: "person",
+                        textContentType: .givenName,
+                        error: vm.firstNameError,
+                        accessibilityId: "first_name_field"
+                    )
 
-                // Email
-                VStack(alignment: .leading, spacing: 4) {
-                    TextField("Email", text: Bindable(vm).email)
-                        .keyboardType(.emailAddress)
-                        .textContentType(.emailAddress)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .accessibilityIdentifier("email_field")
+                    AuthField(
+                        placeholder: "Фамилия",
+                        text: Bindable(vm).lastName,
+                        icon: "person",
+                        textContentType: .familyName,
+                        error: vm.lastNameError,
+                        accessibilityId: "last_name_field"
+                    )
 
-                    if let error = vm.emailError {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                            .accessibilityIdentifier("email_error")
-                    }
-                }
+                    AuthField(
+                        placeholder: "Email",
+                        text: Bindable(vm).email,
+                        icon: "envelope",
+                        keyboardType: .emailAddress,
+                        textContentType: .emailAddress,
+                        error: vm.emailError,
+                        accessibilityId: "email_field",
+                        errorAccessibilityId: "email_error"
+                    )
 
-                // Password
-                VStack(alignment: .leading, spacing: 4) {
-                    SecureField("Пароль", text: Bindable(vm).password)
-                        .textContentType(.newPassword)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .accessibilityIdentifier("password_field")
+                    AuthSecureField(
+                        placeholder: "Пароль",
+                        text: Bindable(vm).password,
+                        icon: "lock",
+                        textContentType: .newPassword,
+                        error: vm.passwordError,
+                        accessibilityId: "password_field",
+                        errorAccessibilityId: "password_error"
+                    )
 
-                    if let error = vm.passwordError {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                            .accessibilityIdentifier("password_error")
-                    }
+                    AuthSecureField(
+                        placeholder: "Подтвердите пароль",
+                        text: Bindable(vm).confirmPassword,
+                        icon: "lock.shield",
+                        textContentType: .newPassword,
+                        error: vm.confirmPasswordError,
+                        accessibilityId: "confirm_password_field",
+                        errorAccessibilityId: "confirm_password_error"
+                    )
                 }
 
-                // Confirm Password
-                VStack(alignment: .leading, spacing: 4) {
-                    SecureField("Подтвердите пароль", text: Bindable(vm).confirmPassword)
-                        .textContentType(.newPassword)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .accessibilityIdentifier("confirm_password_field")
-
-                    if let error = vm.confirmPasswordError {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                            .accessibilityIdentifier("confirm_password_error")
+                VStack(alignment: .leading, spacing: 12) {
+                    Toggle(isOn: Bindable(vm).showDatePicker) {
+                        Label("Указать дату рождения", systemImage: "calendar")
+                            .font(.subheadline)
                     }
-                }
-
-                // Date of Birth
-                Toggle("Указать дату рождения", isOn: Bindable(vm).showDatePicker)
                     .tint(.accentColor)
 
-                if vm.showDatePicker {
-                    DatePicker("Дата рождения", selection: Bindable(vm).dateOfBirth, displayedComponents: .date)
+                    if vm.showDatePicker {
+                        DatePicker(
+                            "Дата рождения",
+                            selection: Bindable(vm).dateOfBirth,
+                            displayedComponents: .date
+                        )
                         .datePickerStyle(.compact)
                         .accessibilityIdentifier("date_of_birth_picker")
-                }
-
-                // Register Button
-                LoadingButton(title: "Зарегистрироваться", isLoading: vm.isLoading) {
-                    Task {
-                        await vm.register()
                     }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+
+                LoadingButton(title: "Зарегистрироваться", isLoading: vm.isLoading) {
+                    Task { await vm.register() }
                 }
                 .accessibilityIdentifier("register_button")
             }
-            .padding()
+            .padding(.horizontal, 24)
+            .padding(.vertical, 20)
         }
     }
 
     @ViewBuilder
-    private func validatedField(_ placeholder: String, text: Binding<String>, error: String?, id: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            TextField(placeholder, text: text)
-                .textContentType(.name)
-                .padding()
-                .background(Color(.systemGray6))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .accessibilityIdentifier(id)
-
-            if let error {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+    private func avatarPicker(_ vm: RegisterViewModel) -> some View {
+        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+            Group {
+                if let data = vm.avatarData, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 96, height: 96)
+                        .clipShape(Circle())
+                } else {
+                    Circle()
+                        .fill(Color(.secondarySystemBackground))
+                        .frame(width: 96, height: 96)
+                        .overlay {
+                            Image(systemName: "camera.fill")
+                                .font(.title2)
+                                .foregroundStyle(.secondary)
+                        }
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                Circle()
+                    .fill(Color.accentColor)
+                    .frame(width: 30, height: 30)
+                    .overlay {
+                        Image(systemName: "plus")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                    .offset(x: 2, y: 2)
+            }
+        }
+        .accessibilityIdentifier("avatar_picker")
+        .onChange(of: selectedPhoto) { _, newValue in
+            Task {
+                if let data = try? await newValue?.loadTransferable(type: Data.self) {
+                    vm.avatarData = data
+                }
             }
         }
     }

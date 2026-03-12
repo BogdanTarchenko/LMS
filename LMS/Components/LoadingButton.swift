@@ -7,19 +7,24 @@ struct LoadingButton: View {
 
     var body: some View {
         Button(action: action) {
-            if isLoading {
-                ProgressView()
-                    .tint(.white)
-            } else {
-                Text(title)
+            Group {
+                if isLoading {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(0.85)
+                } else {
+                    Text(title)
+                        .fontWeight(.semibold)
+                }
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.accentColor)
+        .background(isLoading ? Color.accentColor.opacity(0.7) : Color.accentColor)
         .foregroundStyle(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .disabled(isLoading)
+        .animation(.easeInOut(duration: 0.15), value: isLoading)
     }
 }
 

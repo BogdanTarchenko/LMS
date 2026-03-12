@@ -103,4 +103,49 @@ final class ProfileViewModelTests: XCTestCase {
         // Then
         XCTAssertTrue(sut.isEditing)
     }
+
+    // MARK: - Avatar URL
+
+    func test_promptAvatarChange_showsAlert() async {
+        // Given
+        mockAPI.stubbedProfile = MockData.sampleUser
+        await sut.loadProfile()
+
+        // When
+        sut.promptAvatarChange()
+
+        // Then
+        XCTAssertTrue(sut.showAvatarAlert)
+    }
+
+    func test_updateProfile_withAvatarUrl_updatesAvatar() async {
+        // Given
+        mockAPI.stubbedProfile = MockData.sampleUser
+        await sut.loadProfile()
+        sut.firstName = MockData.sampleUser.firstName
+        sut.lastName = MockData.sampleUser.lastName
+        sut.avatarUrlText = "https://example.com/new-avatar.jpg"
+
+        // When
+        let result = await sut.updateProfile()
+
+        // Then
+        XCTAssertTrue(result)
+        XCTAssertEqual(sut.user?.avatarURL, "https://example.com/new-avatar.jpg")
+    }
+
+    func test_cancelEditing_resetsAvatarUrlText() async {
+        // Given
+        mockAPI.stubbedProfile = MockData.sampleUser
+        await sut.loadProfile()
+        sut.isEditing = true
+        sut.avatarUrlText = "https://example.com/new.jpg"
+
+        // When
+        sut.cancelEditing()
+
+        // Then
+        XCTAssertEqual(sut.avatarUrlText, "")
+        XCTAssertFalse(sut.isEditing)
+    }
 }

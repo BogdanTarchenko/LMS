@@ -19,13 +19,21 @@ struct StatusBadge: View {
         }
     }
 
+    private var icon: String {
+        switch status {
+        case .notSubmitted, nil: "clock"
+        case .submitted: "checkmark.circle"
+        case .graded: "star.circle"
+        }
+    }
+
     var body: some View {
-        Text(title)
-            .font(.caption2)
+        Label(title, systemImage: icon)
+            .font(.caption)
             .fontWeight(.medium)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color.opacity(0.15))
+            .padding(.horizontal, 9)
+            .padding(.vertical, 4)
+            .background(color.opacity(0.12))
             .foregroundStyle(color)
             .clipShape(Capsule())
     }
@@ -38,4 +46,5 @@ struct StatusBadge: View {
         StatusBadge(status: .submitted)
         StatusBadge(status: .graded)
     }
+    .padding()
 }

@@ -37,7 +37,12 @@ final class SubmissionDetailViewModel {
         defer { isLoading = false }
 
         do {
-            submission = try await apiService.gradeSubmission(submissionId: submission.id, grade: grade)
+            let originalFileUrls = submission.fileUrls
+            var updated = try await apiService.gradeSubmission(submissionId: submission.id, grade: grade)
+            if (updated.fileUrls == nil || updated.fileUrls!.isEmpty), let fileUrls = originalFileUrls {
+                updated.fileUrls = fileUrls
+            }
+            submission = updated
             return true
         } catch let error as NetworkError {
             errorMessage = error.localizedDescription

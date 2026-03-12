@@ -54,6 +54,10 @@ final class APIService: APIServiceProtocol {
         return try await put("/classes/\(id)", body: body)
     }
 
+    func regenerateCode(id: String) async throws -> ClassRoom {
+        return try await post("/classes/\(id)/code/regenerate", body: [:])
+    }
+
     // MARK: - Members
 
     func getMembers(classId: String) async throws -> [Member] {
@@ -65,23 +69,41 @@ final class APIService: APIServiceProtocol {
         let _: Member = try await put("/classes/\(classId)/members/\(userId)/role", body: body)
     }
 
+    func removeMember(classId: String, userId: String) async throws {
+        try await delete("/classes/\(classId)/members/\(userId)")
+    }
+
     // MARK: - Assignments
 
     func getAssignments(classId: String) async throws -> [Assignment] {
         return try await getPage("/classes/\(classId)/assignments")
     }
 
-    func createAssignment(classId: String, title: String, description: String, deadline: Date?) async throws -> Assignment {
-        var body: [String: Any] = ["title": title, "description": description]
-        if let deadline {
-            body["deadline"] = ISO8601DateFormatter().string(from: deadline)
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?, files: [FileData]) async throws -> Assignment {
+        let boundary = UUID().uuidString
+        var request = try makeRequest("/classes/\(classId)/assignments", method: "POST")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.appendMultipartField(named: "title", value: title, boundary: boundary)
+        if !description.isEmpty {
+            body.appendMultipartField(named: "description", value: description, boundary: boundary)
         }
-        return try await post("/classes/\(classId)/assignments", body: body)
+        if let deadline {
+            body.appendMultipartField(named: "deadline", value: ISO8601DateFormatter().string(from: deadline), boundary: boundary)
+        }
+        for file in files {
+            body.appendMultipartFile(named: "files", fileName: file.fileName, data: file.data, boundary: boundary)
+        }
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body
+        return try await perform(request)
     }
 
     // MARK: - Submissions
 
-    func submitAnswer(assignmentId: String, text: String?, fileData: Data?, fileName: String?) async throws -> Submission {
+    func submitAnswer(assignmentId: String, text: String?, files: [FileData]) async throws -> Submission {
         let boundary = UUID().uuidString
         var request = try makeRequest("/assignments/\(assignmentId)/submissions", method: "POST")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
@@ -90,8 +112,8 @@ final class APIService: APIServiceProtocol {
         if let text {
             body.appendMultipartField(named: "answerText", value: text, boundary: boundary)
         }
-        if let fileData, let fileName {
-            body.appendMultipartFile(named: "file", fileName: fileName, data: fileData, boundary: boundary)
+        for file in files {
+            body.appendMultipartFile(named: "files", fileName: file.fileName, data: file.data, boundary: boundary)
         }
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
@@ -140,6 +162,19 @@ final class APIService: APIServiceProtocol {
     func updateProfile(request: UpdateProfileRequest) async throws -> User {
         let data = try JSONEncoder.lms.encode(request)
         return try await put("/users/me", bodyData: data)
+    }
+
+    func uploadAvatar(imageData: Data, fileName: String) async throws -> User {
+        let boundary = UUID().uuidString
+        var request = try makeRequest("/users/me/avatar", method: "POST")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.appendMultipartFile(named: "file", fileName: fileName, data: imageData, boundary: boundary, mimeType: "image/jpeg")
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body
+        return try await perform(request)
     }
 
     // MARK: - Private Helpers
@@ -248,6 +283,12 @@ final class APIService: APIServiceProtocol {
         }
         return nil
     }
+
+    // MARK: - Stats
+
+    func getClassStats(classId: String) async throws -> ClassStats {
+        return try await get("/classes/\(classId)/stats")
+    }
 }
 
 // MARK: - Data + Multipart
@@ -259,10 +300,10 @@ private extension Data {
         append("\(value)\r\n".data(using: .utf8)!)
     }
 
-    mutating func appendMultipartFile(named name: String, fileName: String, data: Data, boundary: String) {
+    mutating func appendMultipartFile(named name: String, fileName: String, data: Data, boundary: String, mimeType: String = "application/octet-stream") {
         append("--\(boundary)\r\n".data(using: .utf8)!)
         append("Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
-        append("Content-Type: application/octet-stream\r\n\r\n".data(using: .utf8)!)
+        append("Content-Type: \(mimeType)\r\n\r\n".data(using: .utf8)!)
         append(data)
         append("\r\n".data(using: .utf8)!)
     }

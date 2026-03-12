@@ -14,21 +14,23 @@ struct GradeView: View {
 
     var body: some View {
         Text("\(grade)")
-            .font(.headline)
+            .font(.subheadline)
             .fontWeight(.bold)
+            .monospacedDigit()
             .foregroundStyle(color)
             .padding(.horizontal, 10)
-            .padding(.vertical, 4)
+            .padding(.vertical, 5)
             .background(color.opacity(0.12))
-            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
 
 #Preview {
-    VStack(spacing: 8) {
+    HStack(spacing: 8) {
         GradeView(grade: 95)
         GradeView(grade: 80)
         GradeView(grade: 65)
         GradeView(grade: 40)
     }
+    .padding()
 }

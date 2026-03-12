@@ -7,7 +7,7 @@ struct MemberProfileView: View {
         ScrollView {
             VStack(spacing: 20) {
                 AvatarView(
-                    url: nil,
+                    url: member.avatarUrl,
                     firstName: member.firstName,
                     lastName: member.lastName,
                     size: 80

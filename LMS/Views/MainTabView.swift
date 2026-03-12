@@ -13,7 +13,7 @@ struct MainTabView: View {
                     }
             }
             .tabItem {
-                Label("Классы", systemImage: "book.closed")
+                Label("Классы", systemImage: "books.vertical")
             }
 
             NavigationStack {
@@ -28,4 +28,5 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .environment(AuthManager(apiService: MockAPIService(), keychainHelper: MockKeychainHelper()))
 }

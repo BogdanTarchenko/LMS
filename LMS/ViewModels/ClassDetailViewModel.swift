@@ -59,4 +59,18 @@ final class ClassDetailViewModel {
             return false
         }
     }
+
+    func regenerateCode() async -> Bool {
+        do {
+            let updated = try await apiService.regenerateCode(id: classroom.id)
+            classroom = updated
+            return true
+        } catch let error as NetworkError {
+            errorMessage = error.localizedDescription
+            return false
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
 }

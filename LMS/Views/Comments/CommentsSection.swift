@@ -8,42 +8,63 @@ struct CommentsSection: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Комментарии")
+        VStack(alignment: .leading, spacing: 16) {
+            Label("Комментарии", systemImage: "bubble.left.and.bubble.right")
                 .font(.headline)
-                .padding(.horizontal)
 
             if viewModel.comments.isEmpty && !viewModel.isLoading {
-                Text("Пока нет комментариев")
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal)
+                HStack {
+                    Spacer()
+                    VStack(spacing: 6) {
+                        Image(systemName: "bubble.left")
+                            .font(.largeTitle)
+                            .foregroundStyle(.tertiary)
+                        Text("Пока нет комментариев")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 20)
+                    Spacer()
+                }
             }
 
-            ForEach(viewModel.comments) { comment in
-                CommentRowView(comment: comment)
-                    .padding(.horizontal)
+            VStack(spacing: 12) {
+                ForEach(viewModel.comments) { comment in
+                    CommentRowView(comment: comment)
+                }
             }
 
-            Divider()
-
-            HStack(spacing: 8) {
-                TextField("Комментарий...", text: Bindable(viewModel).newCommentText)
-                    .textFieldStyle(.roundedBorder)
+            HStack(spacing: 10) {
+                TextField("Написать комментарий...", text: Bindable(viewModel).newCommentText, axis: .vertical)
+                    .font(.subheadline)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 11)
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .lineLimit(1...5)
                     .accessibilityIdentifier("comment_field")
 
                 Button {
                     Task { await viewModel.addComment() }
                 } label: {
-                    if viewModel.isSending {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "paperplane.fill")
+                    Group {
+                        if viewModel.isSending {
+                            ProgressView()
+                                .controlSize(.small)
+                        } else {
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 16))
+                        }
                     }
+                    .frame(width: 40, height: 40)
+                    .background(Color.accentColor)
+                    .foregroundStyle(.white)
+                    .clipShape(Circle())
                 }
                 .disabled(viewModel.newCommentText.trimmingCharacters(in: .whitespaces).isEmpty || viewModel.isSending)
+                .opacity(viewModel.newCommentText.trimmingCharacters(in: .whitespaces).isEmpty ? 0.5 : 1)
                 .accessibilityIdentifier("send_comment_button")
             }
-            .padding(.horizontal)
         }
         .task {
             await viewModel.loadComments()

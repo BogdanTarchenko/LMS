@@ -49,4 +49,16 @@ final class MembersListViewModel {
             errorMessage = error.localizedDescription
         }
     }
+
+    func removeMember(userId: String) async {
+        errorMessage = nil
+        do {
+            try await apiService.removeMember(classId: classId, userId: userId)
+            members.removeAll { $0.id == userId }
+        } catch let error as NetworkError {
+            errorMessage = error.localizedDescription
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
 }

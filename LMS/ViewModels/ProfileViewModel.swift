@@ -12,9 +12,18 @@ final class ProfileViewModel {
     var isLoading = false
     var errorMessage: String?
 
-    var selectedPhoto: PhotosPickerItem?
-    var avatarData: Data?
-    var avatarImage: UIImage?
+    var showAvatarOptions = false
+    var showPhotoPicker = false
+    var showAvatarAlert = false
+    var avatarUrlText = ""
+
+    var selectedPhotoItem: PhotosPickerItem? {
+        didSet { Task { await handlePhotoSelection() } }
+    }
+    var selectedAvatarImage: Image?
+
+    private var pendingAvatarData: Data?
+    private var pendingAvatarFileName: String?
 
     private let authManager: AuthManager
     private let apiService: APIServiceProtocol
@@ -41,16 +50,27 @@ final class ProfileViewModel {
         }
     }
 
-    func handlePhotoSelection() async {
-        guard let selectedPhoto else { return }
+    func promptAvatarChange() {
+        showAvatarOptions = true
+    }
 
-        do {
-            if let data = try await selectedPhoto.loadTransferable(type: Data.self) {
-                avatarData = data
-                avatarImage = UIImage(data: data)
-            }
-        } catch {
-            errorMessage = "Не удалось загрузить фото"
+    func promptAvatarURL() {
+        avatarUrlText = user?.avatarURL ?? ""
+        showAvatarAlert = true
+    }
+
+    private func handlePhotoSelection() async {
+        guard let item = selectedPhotoItem else { return }
+        guard let data = try? await item.loadTransferable(type: Data.self) else { return }
+
+        let uiImage = UIImage(data: data)
+        let jpegData = uiImage?.jpegData(compressionQuality: 0.85) ?? data
+
+        pendingAvatarData = jpegData
+        pendingAvatarFileName = "avatar.jpg"
+
+        if let uiImage {
+            selectedAvatarImage = Image(uiImage: uiImage)
         }
     }
 
@@ -59,30 +79,34 @@ final class ProfileViewModel {
         isLoading = true
         defer { isLoading = false }
 
-        var avatarBase64: String?
-        if let avatarData {
-            // Compress to JPEG for smaller size
-            if let uiImage = UIImage(data: avatarData),
-               let jpeg = uiImage.jpegData(compressionQuality: 0.7) {
-                avatarBase64 = jpeg.base64EncodedString()
-            } else {
-                avatarBase64 = avatarData.base64EncodedString()
+        if let data = pendingAvatarData, let fileName = pendingAvatarFileName {
+            do {
+                let updated = try await apiService.uploadAvatar(imageData: data, fileName: fileName)
+                user = updated
+                pendingAvatarData = nil
+                pendingAvatarFileName = nil
+                selectedAvatarImage = nil
+                selectedPhotoItem = nil
+            } catch let error as NetworkError {
+                errorMessage = error.localizedDescription
+                return false
+            } catch {
+                errorMessage = error.localizedDescription
+                return false
             }
         }
 
         let request = UpdateProfileRequest(
             firstName: firstName,
             lastName: lastName,
-            avatarBase64: avatarBase64
+            avatarUrl: avatarUrlText.isEmpty ? user?.avatarURL : avatarUrlText
         )
 
         do {
             let updated = try await apiService.updateProfile(request: request)
             user = updated
             isEditing = false
-            avatarData = nil
-            avatarImage = nil
-            selectedPhoto = nil
+            avatarUrlText = ""
             return true
         } catch let error as NetworkError {
             errorMessage = error.localizedDescription
@@ -98,9 +122,11 @@ final class ProfileViewModel {
         isEditing = false
         firstName = user.firstName
         lastName = user.lastName
-        avatarData = nil
-        avatarImage = nil
-        selectedPhoto = nil
+        avatarUrlText = ""
+        pendingAvatarData = nil
+        pendingAvatarFileName = nil
+        selectedAvatarImage = nil
+        selectedPhotoItem = nil
     }
 
     func logout() {

@@ -15,19 +15,58 @@ struct RoleBadge: View {
         switch role {
         case .owner: .purple
         case .teacher: .blue
-        case .student: .green
+        case .student: .teal
+        }
+    }
+
+    private var icon: String {
+        switch role {
+        case .owner: "crown"
+        case .teacher: "graduationcap"
+        case .student: "person"
         }
     }
 
     var body: some View {
-        Text(title)
-            .font(.caption2)
+        Label(title, systemImage: icon)
+            .font(.caption)
             .fontWeight(.medium)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color.opacity(0.15))
+            .lineLimit(1)
+            .frame(minWidth: 120)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(color.opacity(0.12))
             .foregroundStyle(color)
             .clipShape(Capsule())
+    }
+}
+
+struct RoleIcon: View {
+    let role: Role
+
+    private var color: Color {
+        switch role {
+        case .owner: .purple
+        case .teacher: .blue
+        case .student: .teal
+        }
+    }
+
+    private var icon: String {
+        switch role {
+        case .owner: "crown.fill"
+        case .teacher: "graduationcap.fill"
+        case .student: "person.fill"
+        }
+    }
+
+    var body: some View {
+        Image(systemName: icon)
+            .font(.system(size: 14))
+            .foregroundStyle(color)
+            .frame(width: 32, height: 32)
+            .background(color.opacity(0.12))
+            .clipShape(Circle())
     }
 }
 
@@ -36,5 +75,11 @@ struct RoleBadge: View {
         RoleBadge(role: .owner)
         RoleBadge(role: .teacher)
         RoleBadge(role: .student)
+        HStack(spacing: 12) {
+            RoleIcon(role: .owner)
+            RoleIcon(role: .teacher)
+            RoleIcon(role: .student)
+        }
     }
+    .padding()
 }

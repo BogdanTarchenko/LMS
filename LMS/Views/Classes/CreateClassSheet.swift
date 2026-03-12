@@ -12,14 +12,39 @@ struct CreateClassSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    TextField("Название класса", text: $className)
-                        .accessibilityIdentifier("class_name_field")
-                }
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 24) {
+                    VStack(spacing: 16) {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(
+                                LinearGradient(
+                                    colors: [.accentColor, .accentColor.opacity(0.6)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 72, height: 72)
+                            .overlay {
+                                Image(systemName: "plus.square.fill.on.square.fill")
+                                    .font(.title)
+                                    .foregroundStyle(.white)
+                            }
 
-                Section {
-                    LoadingButton(title: "Создать", isLoading: isLoading) {
+                        Text("Новый класс")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                    }
+                    .padding(.top, 12)
+
+                    AuthField(
+                        placeholder: "Название класса",
+                        text: $className,
+                        icon: "textformat",
+                        error: nil,
+                        accessibilityId: "class_name_field"
+                    )
+
+                    LoadingButton(title: "Создать класс", isLoading: isLoading) {
                         Task {
                             isLoading = true
                             let success = await viewModel.createClass(name: className.trimmingCharacters(in: .whitespaces))
@@ -28,9 +53,11 @@ struct CreateClassSheet: View {
                         }
                     }
                     .disabled(!isValid)
+                    .opacity(isValid ? 1 : 0.5)
                 }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
             }
-            .navigationTitle("Новый класс")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -38,5 +65,6 @@ struct CreateClassSheet: View {
                 }
             }
         }
+        .presentationDetents([.medium])
     }
 }
