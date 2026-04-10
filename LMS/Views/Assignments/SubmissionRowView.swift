@@ -5,15 +5,26 @@ struct SubmissionRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            AvatarView(
-                url: submission.studentAvatarUrl,
-                firstName: submission.studentName.components(separatedBy: " ").first ?? "",
-                lastName: submission.studentName.components(separatedBy: " ").last ?? "",
-                size: 40
-            )
+            if submission.teamName != nil {
+                ZStack {
+                    Circle()
+                        .fill(Color.accentColor.opacity(0.12))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: "person.3.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color.accentColor)
+                }
+            } else {
+                AvatarView(
+                    url: submission.studentAvatarUrl,
+                    firstName: submission.studentName.components(separatedBy: " ").first ?? "",
+                    lastName: submission.studentName.components(separatedBy: " ").last ?? "",
+                    size: 40
+                )
+            }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(submission.studentName)
+                Text(submission.displayName)
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.primary)

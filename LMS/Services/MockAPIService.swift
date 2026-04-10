@@ -13,6 +13,11 @@ final class MockAPIService: APIServiceProtocol {
     var stubbedMySubmission: Submission?
     var stubbedProfile: User?
     var shouldThrowError: NetworkError?
+    var stubbedTeams: [TeamListItem] = []
+    var stubbedTeamDetail: Team?
+    var stubbedMyTeams: [Team] = []
+    var stubbedTeamGrades: [TeamGrade] = []
+    var stubbedMyTeamGrade: MyTeamGrade?
 
     // MARK: - Auth
 
@@ -97,7 +102,7 @@ final class MockAPIService: APIServiceProtocol {
         return stubbedAssignments
     }
 
-    func createAssignment(classId: String, title: String, description: String, deadline: Date?, files: [FileData]) async throws -> Assignment {
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?, isTeamBased: Bool, files: [FileData]) async throws -> Assignment {
         if let error = shouldThrowError { throw error }
         return Assignment(
             id: UUID().uuidString,
@@ -106,7 +111,9 @@ final class MockAPIService: APIServiceProtocol {
             deadline: deadline,
             createdAt: Date(),
             submissionStatus: nil,
-            fileUrls: files.map { "https://example.com/files/\($0.fileName)" }
+            fileUrls: files.map { "https://example.com/files/\($0.fileName)" },
+            type: "STANDARD",
+            isTeamBased: isTeamBased
         )
     }
 
@@ -201,6 +208,111 @@ final class MockAPIService: APIServiceProtocol {
         stubbedProfile = user
         return user
     }
+
+    // MARK: - Teams
+
+    func getTeams(classId: String) async throws -> [TeamListItem] {
+        if let error = shouldThrowError { throw error }
+        return stubbedTeams
+    }
+
+    func getTeam(classId: String, teamId: String) async throws -> Team {
+        if let error = shouldThrowError { throw error }
+        return stubbedTeamDetail ?? Team(
+            id: teamId, classId: classId, assignmentId: nil,
+            name: "Ансамбль A",
+            members: [
+                TeamMember(userId: "user-1", firstName: "Иван", lastName: "Петров", isLeader: true, joinedAt: Date()),
+                TeamMember(userId: "user-2", firstName: "Анна", lastName: "Сидорова", isLeader: false, joinedAt: Date())
+            ],
+            createdBy: "user-1", createdAt: Date()
+        )
+    }
+
+    func createTeam(classId: String, name: String, assignmentId: String?, memberUserIds: [String], leaderUserId: String?) async throws -> Team {
+        if let error = shouldThrowError { throw error }
+        let members = memberUserIds.enumerated().map { i, uid in
+            TeamMember(userId: uid, firstName: "Участник", lastName: "\(i+1)", isLeader: uid == leaderUserId, joinedAt: Date())
+        }
+        return Team(id: UUID().uuidString, classId: classId, assignmentId: assignmentId, name: name, members: members, createdBy: "me", createdAt: Date())
+    }
+
+    func updateTeam(classId: String, teamId: String, name: String?, leaderUserId: String?) async throws -> Team {
+        if let error = shouldThrowError { throw error }
+        return Team(id: teamId, classId: classId, assignmentId: nil, name: name ?? "Команда", members: [], createdBy: "me", createdAt: Date())
+    }
+
+    func deleteTeam(classId: String, teamId: String) async throws {
+        if let error = shouldThrowError { throw error }
+    }
+
+    func shuffleTeams(classId: String, teamCount: Int, assignmentId: String?, strategy: String) async throws -> ShuffleResponse {
+        if let error = shouldThrowError { throw error }
+        let teams = (1...teamCount).map { i in
+            Team(id: UUID().uuidString, classId: classId, assignmentId: assignmentId, name: "Команда \(i)",
+                 members: [TeamMember(userId: UUID().uuidString, firstName: "Лидер", lastName: "\(i)", isLeader: true, joinedAt: Date())],
+                 createdBy: "me", createdAt: Date())
+        }
+        return ShuffleResponse(teams: teams, totalStudents: teamCount * 3, studentsPerTeam: 3)
+    }
+
+    func addTeamMember(classId: String, teamId: String, userId: String, isLeader: Bool) async throws -> Team {
+        if let error = shouldThrowError { throw error }
+        return try await getTeam(classId: classId, teamId: teamId)
+    }
+
+    func removeTeamMember(classId: String, teamId: String, userId: String) async throws {
+        if let error = shouldThrowError { throw error }
+    }
+
+    func getMyTeams(classId: String) async throws -> [Team] {
+        if let error = shouldThrowError { throw error }
+        return stubbedMyTeams
+    }
+
+    // MARK: - Team Grades
+
+    func createTeamGrade(assignmentId: String, teamId: String, grade: Int, comment: String?) async throws -> TeamGrade {
+        if let error = shouldThrowError { throw error }
+        let adjustments = [
+            IndividualAdjustment(studentId: "user-1", studentName: "Иван Петров", teamGrade: grade, adjustment: 0, finalGrade: grade, comment: nil, gradedBy: nil, gradedAt: nil)
+        ]
+        return TeamGrade(id: UUID().uuidString, teamId: teamId, teamName: "Команда", assignmentId: assignmentId, grade: grade, comment: comment, individualGrades: adjustments, gradedBy: "me", gradedAt: Date())
+    }
+
+    func getTeamGrades(assignmentId: String) async throws -> [TeamGrade] {
+        if let error = shouldThrowError { throw error }
+        return stubbedTeamGrades
+    }
+
+    func updateTeamGrade(assignmentId: String, teamGradeId: String, grade: Int, comment: String?) async throws -> TeamGrade {
+        if let error = shouldThrowError { throw error }
+        return TeamGrade(id: teamGradeId, teamId: "team-1", teamName: "Команда", assignmentId: assignmentId, grade: grade, comment: comment, individualGrades: [], gradedBy: "me", gradedAt: Date())
+    }
+
+    func getAdjustments(assignmentId: String, teamGradeId: String) async throws -> [IndividualAdjustment] {
+        if let error = shouldThrowError { throw error }
+        return []
+    }
+
+    func updateAdjustment(assignmentId: String, teamGradeId: String, studentId: String, adjustment: Int, comment: String?) async throws -> IndividualAdjustment {
+        if let error = shouldThrowError { throw error }
+        return IndividualAdjustment(studentId: studentId, studentName: "Студент", teamGrade: 80, adjustment: adjustment, finalGrade: min(max(80 + adjustment, 0), 100), comment: comment, gradedBy: "me", gradedAt: Date())
+    }
+
+    func getMyTeamGrade(assignmentId: String) async throws -> MyTeamGrade? {
+        if let error = shouldThrowError { throw error }
+        return stubbedMyTeamGrade
+    }
+
+    // MARK: - Quick Assignments
+
+    func createQuickAssignment(classId: String, title: String, isTeamBased: Bool, teamIds: [String]) async throws -> Assignment {
+        if let error = shouldThrowError { throw error }
+        return Assignment(id: UUID().uuidString, title: title, description: "", deadline: nil, createdAt: Date(), submissionStatus: nil, fileUrls: nil, type: "QUICK", isTeamBased: isTeamBased)
+    }
+
+    // MARK: - Stats
 
     func getClassStats(classId: String) async throws -> ClassStats {
         if let error = shouldThrowError { throw error }

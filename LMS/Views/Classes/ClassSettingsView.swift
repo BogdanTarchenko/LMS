@@ -54,7 +54,7 @@ struct ClassSettingsView: View {
             Button("Обновить", role: .destructive) {
                 Task {
                     isRegenerating = true
-                    await viewModel.regenerateCode()
+                    _ = await viewModel.regenerateCode()
                     isRegenerating = false
                 }
             }

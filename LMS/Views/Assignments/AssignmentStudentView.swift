@@ -4,10 +4,12 @@ struct AssignmentStudentView: View {
     @Environment(\.apiService) private var apiService
     @State private var viewModel: AssignmentStudentViewModel
     @State private var showFilePicker = false
-    @State private var showAssignmentFilePicker = false
 
-    init(assignment: Assignment) {
+    let classId: String
+
+    init(assignment: Assignment, classId: String) {
         _viewModel = State(initialValue: AssignmentStudentViewModel(assignment: assignment, apiService: APIService.shared))
+        self.classId = classId
     }
 
     var body: some View {
@@ -15,18 +17,22 @@ struct AssignmentStudentView: View {
             VStack(spacing: 20) {
                 assignmentInfoSection
 
-                if let error = viewModel.errorMessage {
-                    ErrorBanner(message: error)
-                        .padding(.horizontal, 20)
-                }
-
-                if viewModel.isLoading && viewModel.submission == nil && !viewModel.isEditing {
-                    ProgressView()
-                        .padding(40)
-                } else if viewModel.hasSubmitted && !viewModel.isEditing {
-                    submittedSection
+                if viewModel.assignment.isTeamAssignment {
+                    teamSubmissionSection
                 } else {
-                    submitFormSection
+                    if let error = viewModel.errorMessage {
+                        ErrorBanner(message: error)
+                            .padding(.horizontal, 20)
+                    }
+
+                    if viewModel.isLoading && viewModel.submission == nil && !viewModel.isEditing {
+                        ProgressView()
+                            .padding(40)
+                    } else if viewModel.hasSubmitted && !viewModel.isEditing {
+                        submittedSection
+                    } else {
+                        submitFormSection
+                    }
                 }
 
                 commentsSection
@@ -35,13 +41,78 @@ struct AssignmentStudentView: View {
         }
         .task {
             viewModel.apiService = apiService
-            await viewModel.loadMySubmission()
+            if viewModel.assignment.isTeamAssignment {
+                await viewModel.loadTeamInfo(classId: classId)
+            } else {
+                await viewModel.loadMySubmission()
+            }
         }
         .sheet(isPresented: $showFilePicker) {
             DocumentPicker(allowsMultipleSelection: true) { files in
                 viewModel.addFiles(files)
             }
         }
+    }
+
+    private var teamSubmissionSection: some View {
+        VStack(spacing: 16) {
+            if let error = viewModel.errorMessage {
+                ErrorBanner(message: error)
+                    .padding(.horizontal, 20)
+            }
+
+            if viewModel.isLoading && viewModel.submission == nil && !viewModel.isEditing {
+                ProgressView().padding(40)
+            } else if viewModel.isTeamLeader {
+                leaderSubmissionSection
+            } else {
+                memberTeamGradeSection
+            }
+        }
+    }
+
+    private var leaderSubmissionSection: some View {
+        VStack(spacing: 16) {
+            leaderBadge
+
+            if viewModel.hasSubmitted && !viewModel.isEditing {
+                submittedSection
+            } else {
+                submitFormSection
+            }
+
+            memberTeamGradeSection
+        }
+    }
+
+    private var leaderBadge: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "crown.fill")
+                .foregroundStyle(.yellow)
+            Text("Вы лидер команды — можете сдать работу за всю команду")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.yellow.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .padding(.horizontal, 16)
+    }
+
+    private var memberTeamGradeSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 12) {
+                Label("Командная оценка", systemImage: "person.3.fill")
+                    .font(.headline)
+                MyTeamGradeView(assignmentId: viewModel.assignment.id)
+            }
+            .padding(20)
+        }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
+        .padding(.horizontal, 16)
     }
 
     private var assignmentInfoSection: some View {
@@ -55,8 +126,8 @@ struct AssignmentStudentView: View {
                     DeadlineBadge(deadline: deadline)
                 }
 
-                if !viewModel.assignment.description.isEmpty {
-                    Text(viewModel.assignment.description)
+                if let desc = viewModel.assignment.description, !desc.isEmpty {
+                    Text(desc)
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }
@@ -136,6 +207,7 @@ struct AssignmentStudentView: View {
                                         .background(Color.accentColor.opacity(0.1))
                                         .foregroundStyle(Color.accentColor)
                                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .contentShape(RoundedRectangle(cornerRadius: 12))
                                 }
                             }
 
@@ -151,6 +223,7 @@ struct AssignmentStudentView: View {
                                         .background(Color.red.opacity(0.1))
                                         .foregroundStyle(.red)
                                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .contentShape(RoundedRectangle(cornerRadius: 12))
                                 }
                             }
                         }
@@ -225,6 +298,7 @@ struct AssignmentStudentView: View {
                                 .padding(.vertical, 10)
                                 .background(Color(.secondarySystemBackground))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .contentShape(RoundedRectangle(cornerRadius: 10))
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -267,4 +341,3 @@ struct AssignmentStudentView: View {
         .padding(.horizontal, 16)
     }
 }
-

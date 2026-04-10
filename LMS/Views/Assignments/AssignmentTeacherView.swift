@@ -13,9 +13,12 @@ struct AssignmentTeacherView: View {
             VStack(spacing: 16) {
                 infoSection
 
-                filterSection
-
-                submissionsSection
+                if viewModel.assignment.isTeamAssignment {
+                    teamSubmissionsSection
+                } else {
+                    filterSection
+                    submissionsSection
+                }
 
                 commentsSection
             }
@@ -40,8 +43,8 @@ struct AssignmentTeacherView: View {
                 DeadlineBadge(deadline: deadline)
             }
 
-            if !viewModel.assignment.description.isEmpty {
-                Text(viewModel.assignment.description)
+            if let desc = viewModel.assignment.description, !desc.isEmpty {
+                Text(desc)
                     .font(.body)
                     .foregroundStyle(.secondary)
             }
@@ -146,6 +149,51 @@ struct AssignmentTeacherView: View {
                         .buttonStyle(.plain)
 
                         if index < viewModel.filteredSubmissions.count - 1 {
+                            Divider()
+                                .padding(.leading, 68)
+                        }
+                    }
+                }
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .shadow(color: .black.opacity(0.04), radius: 8, y: 3)
+            }
+        }
+    }
+
+    private var teamSubmissionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Ответы команд", systemImage: "tray.fill")
+                .font(.headline)
+                .padding(.horizontal, 4)
+
+            if viewModel.submissions.isEmpty {
+                HStack {
+                    Spacer()
+                    VStack(spacing: 8) {
+                        Image(systemName: "tray")
+                            .font(.largeTitle)
+                            .foregroundStyle(.tertiary)
+                        Text("Нет ответов")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(32)
+                    Spacer()
+                }
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(viewModel.submissions.enumerated()), id: \.element.id) { index, submission in
+                        NavigationLink(value: submission) {
+                            SubmissionRowView(submission: submission)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                        }
+                        .buttonStyle(.plain)
+
+                        if index < viewModel.submissions.count - 1 {
                             Divider()
                                 .padding(.leading, 68)
                         }

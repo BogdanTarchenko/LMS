@@ -79,7 +79,7 @@ final class APIService: APIServiceProtocol {
         return try await getPage("/classes/\(classId)/assignments")
     }
 
-    func createAssignment(classId: String, title: String, description: String, deadline: Date?, files: [FileData]) async throws -> Assignment {
+    func createAssignment(classId: String, title: String, description: String, deadline: Date?, isTeamBased: Bool, files: [FileData]) async throws -> Assignment {
         let boundary = UUID().uuidString
         var request = try makeRequest("/classes/\(classId)/assignments", method: "POST")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
@@ -92,6 +92,7 @@ final class APIService: APIServiceProtocol {
         if let deadline {
             body.appendMultipartField(named: "deadline", value: ISO8601DateFormatter().string(from: deadline), boundary: boundary)
         }
+        body.appendMultipartField(named: "isTeamBased", value: isTeamBased ? "true" : "false", boundary: boundary)
         for file in files {
             body.appendMultipartFile(named: "files", fileName: file.fileName, data: file.data, boundary: boundary)
         }
@@ -288,6 +289,99 @@ final class APIService: APIServiceProtocol {
 
     func getClassStats(classId: String) async throws -> ClassStats {
         return try await get("/classes/\(classId)/stats")
+    }
+
+    // MARK: - Teams
+
+    func getTeams(classId: String) async throws -> [TeamListItem] {
+        return try await getPage("/classes/\(classId)/teams")
+    }
+
+    func getTeam(classId: String, teamId: String) async throws -> Team {
+        return try await get("/classes/\(classId)/teams/\(teamId)")
+    }
+
+    func createTeam(classId: String, name: String, assignmentId: String?, memberUserIds: [String], leaderUserId: String?) async throws -> Team {
+        var body: [String: Any] = [
+            "name": name,
+            "memberUserIds": memberUserIds
+        ]
+        if let assignmentId { body["assignmentId"] = assignmentId }
+        if let leaderUserId { body["leaderUserId"] = leaderUserId }
+        return try await post("/classes/\(classId)/teams", body: body)
+    }
+
+    func updateTeam(classId: String, teamId: String, name: String?, leaderUserId: String?) async throws -> Team {
+        var body: [String: Any] = [:]
+        if let name { body["name"] = name }
+        if let leaderUserId { body["leaderUserId"] = leaderUserId }
+        return try await put("/classes/\(classId)/teams/\(teamId)", body: body)
+    }
+
+    func deleteTeam(classId: String, teamId: String) async throws {
+        try await delete("/classes/\(classId)/teams/\(teamId)")
+    }
+
+    func shuffleTeams(classId: String, teamCount: Int, assignmentId: String?, strategy: String) async throws -> ShuffleResponse {
+        var body: [String: Any] = ["teamCount": teamCount, "strategy": strategy]
+        if let assignmentId { body["assignmentId"] = assignmentId }
+        return try await post("/classes/\(classId)/teams/shuffle", body: body)
+    }
+
+    func addTeamMember(classId: String, teamId: String, userId: String, isLeader: Bool) async throws -> Team {
+        let body: [String: Any] = ["userId": userId, "isLeader": isLeader]
+        return try await post("/classes/\(classId)/teams/\(teamId)/members", body: body)
+    }
+
+    func removeTeamMember(classId: String, teamId: String, userId: String) async throws {
+        try await delete("/classes/\(classId)/teams/\(teamId)/members/\(userId)")
+    }
+
+    func getMyTeams(classId: String) async throws -> [Team] {
+        return try await get("/classes/\(classId)/teams/my")
+    }
+
+    // MARK: - Team Grades
+
+    func createTeamGrade(assignmentId: String, teamId: String, grade: Int, comment: String?) async throws -> TeamGrade {
+        var body: [String: Any] = ["teamId": teamId, "grade": grade]
+        if let comment { body["comment"] = comment }
+        return try await post("/assignments/\(assignmentId)/team-grades", body: body)
+    }
+
+    func getTeamGrades(assignmentId: String) async throws -> [TeamGrade] {
+        return try await getPage("/assignments/\(assignmentId)/team-grades")
+    }
+
+    func updateTeamGrade(assignmentId: String, teamGradeId: String, grade: Int, comment: String?) async throws -> TeamGrade {
+        var body: [String: Any] = ["grade": grade]
+        if let comment { body["comment"] = comment }
+        return try await put("/assignments/\(assignmentId)/team-grades/\(teamGradeId)", body: body)
+    }
+
+    func getAdjustments(assignmentId: String, teamGradeId: String) async throws -> [IndividualAdjustment] {
+        return try await get("/assignments/\(assignmentId)/team-grades/\(teamGradeId)/adjustments")
+    }
+
+    func updateAdjustment(assignmentId: String, teamGradeId: String, studentId: String, adjustment: Int, comment: String?) async throws -> IndividualAdjustment {
+        var body: [String: Any] = ["adjustment": adjustment]
+        if let comment { body["comment"] = comment }
+        return try await put("/assignments/\(assignmentId)/team-grades/\(teamGradeId)/adjustments/\(studentId)", body: body)
+    }
+
+    func getMyTeamGrade(assignmentId: String) async throws -> MyTeamGrade? {
+        do {
+            return try await get("/assignments/\(assignmentId)/my-team-grade")
+        } catch NetworkError.notFound {
+            return nil
+        }
+    }
+
+    // MARK: - Quick Assignments
+
+    func createQuickAssignment(classId: String, title: String, isTeamBased: Bool, teamIds: [String]) async throws -> Assignment {
+        let body: [String: Any] = ["title": title, "isTeamBased": isTeamBased, "teamIds": teamIds]
+        return try await post("/classes/\(classId)/quick-assignments", body: body)
     }
 }
 

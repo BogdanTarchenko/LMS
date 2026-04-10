@@ -36,17 +36,33 @@ struct SubmissionDetailView: View {
 
     private var studentInfoSection: some View {
         HStack(spacing: 14) {
-            AvatarView(
-                url: viewModel.submission.studentAvatarUrl,
-                firstName: viewModel.submission.studentName.components(separatedBy: " ").first ?? "",
-                lastName: viewModel.submission.studentName.components(separatedBy: " ").last ?? "",
-                size: 52
-            )
+            if viewModel.submission.teamName != nil {
+                ZStack {
+                    Circle()
+                        .fill(Color.accentColor.opacity(0.12))
+                        .frame(width: 52, height: 52)
+                    Image(systemName: "person.3.fill")
+                        .foregroundStyle(Color.accentColor)
+                }
+            } else {
+                AvatarView(
+                    url: viewModel.submission.studentAvatarUrl,
+                    firstName: viewModel.submission.studentName.components(separatedBy: " ").first ?? "",
+                    lastName: viewModel.submission.studentName.components(separatedBy: " ").last ?? "",
+                    size: 52
+                )
+            }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(viewModel.submission.studentName)
+                Text(viewModel.submission.displayName)
                     .font(.title3)
                     .fontWeight(.semibold)
+
+                if viewModel.submission.teamName != nil {
+                    Text("Сдал: \(viewModel.submission.studentName)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
 
                 HStack(spacing: 4) {
                     Image(systemName: "clock")

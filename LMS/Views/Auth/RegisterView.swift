@@ -117,9 +117,10 @@ struct RegisterView: View {
 
     @ViewBuilder
     private func avatarPicker(_ vm: RegisterViewModel) -> some View {
+        let avatarData = vm.avatarData
         PhotosPicker(selection: $selectedPhoto, matching: .images) {
             Group {
-                if let data = vm.avatarData, let uiImage = UIImage(data: data) {
+                if let data = avatarData, let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()

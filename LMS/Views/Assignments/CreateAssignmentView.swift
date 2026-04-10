@@ -23,6 +23,7 @@ struct CreateAssignmentView: View {
                     titleSection
                     descriptionSection
                     deadlineSection
+                    teamSection
                     filesSection
                     publishButton
                 }
@@ -118,6 +119,20 @@ struct CreateAssignmentView: View {
                     .padding(16)
                 }
             }
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+    }
+
+    private var teamSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            fieldLabel("Командное задание", icon: "person.3")
+            Toggle(isOn: Bindable(viewModel).isTeamBased) {
+                Label("Задание для команд", systemImage: "person.3.fill")
+                    .font(.subheadline)
+            }
+            .tint(.accentColor)
+            .padding(16)
             .background(Color(.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 14))
         }

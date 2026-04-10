@@ -4,6 +4,7 @@ struct ClassDetailView: View {
     @Environment(\.apiService) private var apiService
     @State private var viewModel: ClassDetailViewModel
     @State private var showCreateAssignment = false
+    @State private var showCreateQuickAssignment = false
     @State private var showSettings = false
 
     init(classroom: ClassRoom) {
@@ -47,32 +48,51 @@ struct ClassDetailView: View {
         }
         .navigationTitle(viewModel.classroom.name)
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
-                NavigationLink(value: "members_\(viewModel.classroom.id)") {
-                    Image(systemName: "person.2")
-                }
-
-                if canViewStats {
-                    NavigationLink(value: "stats_\(viewModel.classroom.id)") {
-                        Image(systemName: "chart.bar")
+            // ⋯ — всегда видно
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    NavigationLink(value: "members_\(viewModel.classroom.id)") {
+                        Label("Участники", systemImage: "person.2")
                     }
-                }
-
-                if viewModel.canCreateAssignment {
+                    NavigationLink(value: "teams_\(viewModel.classroom.id)") {
+                        Label("Команды", systemImage: "person.3")
+                    }
+                    if canViewStats {
+                        NavigationLink(value: "stats_\(viewModel.classroom.id)") {
+                            Label("Статистика", systemImage: "chart.bar")
+                        }
+                    }
+                    Divider()
                     Button {
-                        showCreateAssignment = true
+                        showSettings = true
+                    } label: {
+                        Label("Настройки класса", systemImage: "gearshape")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+
+            // + — только owner/teacher
+            if viewModel.canCreateAssignment {
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        Button {
+                            showCreateAssignment = true
+                        } label: {
+                            Label("Задание", systemImage: "doc.text")
+                        }
+                        Button {
+                            showCreateQuickAssignment = true
+                        } label: {
+                            Label("Быстрое задание", systemImage: "bolt")
+                        }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title3)
                             .symbolRenderingMode(.hierarchical)
                     }
                     .accessibilityIdentifier("create_assignment_button")
-                }
-
-                Button {
-                    showSettings = true
-                } label: {
-                    Image(systemName: "gearshape")
                 }
             }
         }
@@ -81,11 +101,16 @@ struct ClassDetailView: View {
                 Task { await viewModel.loadAssignments() }
             }
         }
+        .sheet(isPresented: $showCreateQuickAssignment) {
+            CreateQuickAssignmentSheet(classId: viewModel.classroom.id) {
+                Task { await viewModel.loadAssignments() }
+            }
+        }
         .sheet(isPresented: $showSettings) {
             ClassSettingsView(viewModel: viewModel)
         }
         .navigationDestination(for: Assignment.self) { assignment in
-            AssignmentDetailView(assignment: assignment, role: viewModel.classroom.myRole)
+            AssignmentDetailView(assignment: assignment, role: viewModel.classroom.myRole, classId: viewModel.classroom.id)
         }
         .navigationDestination(for: String.self) { value in
             if value.hasPrefix("members_") {
@@ -94,6 +119,9 @@ struct ClassDetailView: View {
             } else if value.hasPrefix("stats_") {
                 let classId = String(value.dropFirst("stats_".count))
                 ClassStatsView(classId: classId)
+            } else if value.hasPrefix("teams_") {
+                let classId = String(value.dropFirst("teams_".count))
+                TeamsListView(classId: classId, myRole: viewModel.classroom.myRole)
             }
         }
         .task {

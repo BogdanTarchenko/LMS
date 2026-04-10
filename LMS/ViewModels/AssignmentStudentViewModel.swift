@@ -7,11 +7,14 @@ final class AssignmentStudentViewModel {
     var answerText = ""
     var attachedFiles: [FileData] = []
     var submission: Submission?
+    var myTeam: Team?
     var errorMessage: String?
     var isLoading = false
     var isEditing = false
 
     var hasSubmitted: Bool { submission != nil }
+
+    var isTeamLeader: Bool { myTeam?.leader != nil }
 
     var isDeadlinePassed: Bool {
         guard let deadline = assignment.deadline else { return false }
@@ -52,6 +55,31 @@ final class AssignmentStudentViewModel {
             errorMessage = error.localizedDescription
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    func loadTeamInfo(classId: String) async {
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+
+        do {
+            let teams = try await apiService.getMyTeams(classId: classId)
+            myTeam = teams.first(where: { $0.assignmentId == assignment.id })
+                ?? teams.first(where: { $0.assignmentId == nil })
+        } catch let error as NetworkError {
+            errorMessage = error.localizedDescription
+            return
+        } catch {
+            errorMessage = error.localizedDescription
+            return
+        }
+
+        guard isTeamLeader else { return }
+
+        do {
+            submission = try await apiService.getMySubmission(assignmentId: assignment.id)
+        } catch {
         }
     }
 

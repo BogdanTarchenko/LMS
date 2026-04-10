@@ -7,6 +7,7 @@ final class CreateAssignmentViewModel {
     var description = ""
     var hasDeadline = false
     var deadline = Date().addingTimeInterval(7 * 24 * 3600)
+    var isTeamBased = false
     var titleError: String?
     var errorMessage: String?
     var isLoading = false
@@ -45,6 +46,7 @@ final class CreateAssignmentViewModel {
                 title: trimmedTitle,
                 description: description,
                 deadline: hasDeadline ? deadline : nil,
+                isTeamBased: isTeamBased,
                 files: selectedFiles
             )
             selectedFiles = []

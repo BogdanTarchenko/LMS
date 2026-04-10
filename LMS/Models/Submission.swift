@@ -9,11 +9,14 @@ struct Submission: Codable, Identifiable, Hashable {
     var fileUrls: [String]?
     var grade: Int?
     var submittedAt: Date
+    var teamName: String?
+
+    var displayName: String { teamName ?? studentName }
 
     enum CodingKeys: String, CodingKey {
         case id, studentId, studentName, studentAvatarUrl
         case text = "answerText"
         case fileUrls
-        case grade, submittedAt
+        case grade, submittedAt, teamName
     }
 }
